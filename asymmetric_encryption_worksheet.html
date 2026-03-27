@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>단방향 암호화 & 비대칭 암호화 학습지</title>
+<title>암호화 기술(단방향, 비대칭 암호화)</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -157,7 +157,7 @@
   <!-- HEADER -->
   <div class="header">
     <div class="header-badge">🔐 SECURITY · CRYPTOGRAPHY</div>
-    <h1>단방향 암호화 &amp; <span>비대칭 암호화</span><br>완전 정복 학습지</h1>
+    <h1>암호화 기술<br><span>(단방향, 비대칭 암호화)</span></h1>
     <p class="header-sub">해시 함수의 원리부터 QR 인증 실습까지</p>
   </div>
 
@@ -187,7 +187,7 @@
         <div class="mini-card">
           <span class="icon">🌪️</span>
           <h4>눈사태 효과</h4>
-          <p>입력이 1비트만 바뀌어도<br>출력이 <strong>완전히</strong> 달라짐</p>
+          <p>입력이 조금만 바뀌어도<br>출력이 <strong>완전히</strong> 달라짐</p>
         </div>
         <div class="mini-card">
           <span class="icon">🛡️</span>
@@ -360,6 +360,68 @@
       </p>
     </div>
 
+    <!-- QR 요청 ~ 스캔 인증 흐름 설명 -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">📡 QR 발급 요청 과정</p>
+      <div class="flow-steps">
+        <div class="flow-step" data-step="1">
+          <div class="flow-step-title">본인 인증</div>
+          <div class="flow-step-body">앱 실행 시 휴대폰 번호 + 통신사 인증으로 본인 확인. 내 폰, 내 번호로만 로그인 가능해서 남의 QR을 발급받을 수 없습니다.</div>
+        </div>
+        <div class="flow-step" data-step="2">
+          <div class="flow-step-title">서버에 QR 발급 요청</div>
+          <div class="flow-step-body">앱이 HTTPS로 서버에 요청합니다.<br>
+          <span class="ci">[사용자 앱] → HTTPS → [정부 서버] "QR 발급해줘"</span></div>
+        </div>
+        <div class="flow-step" data-step="3">
+          <div class="flow-step-title">서버에서 QR 생성</div>
+          <div class="flow-step-body">
+            서버가 DB에서 접종 정보를 꺼내 아래 과정을 수행합니다.<br>
+            ① 사용자 데이터 + 발급 시각 묶기 → ② SHA-256 해시 → ③ 정부 개인키로 전자서명 → ④ QR 이미지 생성
+          </div>
+        </div>
+        <div class="flow-step" data-step="4">
+          <div class="flow-step-title">QR을 앱으로 전송 → 화면 표시</div>
+          <div class="flow-step-body">HTTPS로 QR 이미지를 내려보냅니다. QR은 <strong>15~30초</strong> 후 자동 만료되어 캡처 재사용이 불가능합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔍 QR 스캔 후 인증 과정</p>
+      <div class="flow-steps">
+        <div class="flow-step" data-step="1">
+          <div class="flow-step-title">QR 데이터 추출</div>
+          <div class="flow-step-body">QR 안에는 두 가지가 들어있습니다.<br>
+          <span class="ci">① 원본 데이터</span> (이름, 접종여부, 발급시각) &nbsp;+&nbsp; <span class="ci">② 전자서명</span> (정부 개인키로 서명한 값)</div>
+        </div>
+        <div class="flow-step" data-step="2">
+          <div class="flow-step-title">공개키로 서명 복호화 → 해시A 추출</div>
+          <div class="flow-step-body">검사원 앱에 미리 설치된 <strong>정부 공개키</strong>로 전자서명을 복호화합니다.<br>
+          <span class="ci">해시A = 공개키(전자서명)</span></div>
+        </div>
+        <div class="flow-step" data-step="3">
+          <div class="flow-step-title">원본 데이터 직접 해시 → 해시B 계산</div>
+          <div class="flow-step-body">QR의 원본 데이터를 앱이 직접 SHA-256으로 계산합니다.<br>
+          <span class="ci">해시B = SHA-256(원본 데이터)</span></div>
+        </div>
+        <div class="flow-step" data-step="4">
+          <div class="flow-step-title">해시A == 해시B 비교</div>
+          <div class="flow-step-body">
+            일치 → ✅ 입장 허가 &nbsp;|&nbsp; 불일치 → ❌ 위조 탐지<br>
+            이후 발급 시각 확인 — 30초 초과 시 만료 처리
+          </div>
+        </div>
+        <div class="flow-step" data-step="5">
+          <div class="flow-step-title">신분증 대조 (마지막 방어선)</div>
+          <div class="flow-step-body">QR의 이름·생년월일과 실제 신분증을 대조합니다. QR 위조는 해시+서명으로, <strong>사람 바꿔치기</strong>는 신분증 대조로 막는 이중 구조입니다.</div>
+        </div>
+      </div>
+      <div class="highlight-box green" style="margin-bottom:0;margin-top:16px;">
+        ✅ <strong>오프라인 검증 가능:</strong> 공개키는 앱에 미리 설치되어 있고 해시 계산은 기기 안에서 이루어지므로, 인터넷이 없어도 QR 검증이 정상 작동합니다.
+      </div>
+    </div>
+
     <div class="sim-wrap">
       <div class="sim-tabs">
         <button class="sim-tab active" id="stab-issue" onclick="simTab('issue')">🏛️ 1단계: QR 발급</button>
@@ -465,10 +527,165 @@
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 05 : 비대칭 암호화란? -->
+  <!-- SECTION 05 : 대칭 암호화 & OTP -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
     <div class="section-label">SECTION 05</div>
+    <div class="section-title">🔁 대칭 암호화 &amp; OTP 원리</div>
+
+    <!-- 대칭키 개념 -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">대칭 암호화란?</p>
+      <p style="font-size:14px;line-height:1.9;margin-bottom:16px;">
+        <strong>대칭 암호화</strong>는 암호화할 때와 복호화할 때 <strong style="color:var(--accent)">같은 키</strong>를 사용하는 방식입니다.
+        서버와 사용자가 동일한 비밀키를 공유하고, 그 키로 데이터를 잠그고 엽니다.
+      </p>
+      <div class="two-col">
+        <div class="mini-card">
+          <span class="icon">⚡</span>
+          <h4>대칭 암호화</h4>
+          <p>같은 키로 잠그고 엶.<br>빠르지만 키 전달이 위험.<br>AES, DES 등</p>
+        </div>
+        <div class="mini-card">
+          <span class="icon">🔑🗝️</span>
+          <h4>비대칭 암호화</h4>
+          <p>다른 키로 잠그고 엶.<br>느리지만 키 전달 안전.<br>RSA, ECC 등</p>
+        </div>
+      </div>
+      <div class="highlight-box yellow" style="margin-bottom:0;">
+        💡 HTTPS는 두 방식을 함께 씁니다 — <strong>비대칭으로 키를 교환</strong>하고, 이후 실제 데이터는 <strong>대칭(AES)으로 빠르게</strong> 암호화합니다.
+      </div>
+    </div>
+
+    <!-- OTP 원리 -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">📱 OTP — 대칭키의 대표 응용</p>
+      <p style="font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:18px;">
+        OTP(One-Time Password)는 서버와 내 기기가 <strong>같은 비밀키(시드값)</strong>를 공유하고,
+        같은 알고리즘으로 같은 숫자를 동시에 계산하는 대칭키 방식입니다.
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(79,142,247,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.25);padding:3px 10px;border-radius:20px;">STEP 01</span>
+            <span style="font-weight:700;font-size:14px;">시드값(비밀키) 공유</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div style="font-size:13px;color:var(--text-dim);">최초 앱 등록 시 QR 스캔으로 시드값을 기기에 저장합니다. 이후 네트워크로 전송되지 않습니다.</div>
+            <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent3);margin-top:8px;">서버 시드값 == 내 앱 시드값 (대칭키)</div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(79,142,247,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.25);padding:3px 10px;border-radius:20px;">STEP 02</span>
+            <span style="font-weight:700;font-size:14px;">HMAC-SHA1로 OTP 계산</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">서버와 앱이 동시에 같은 계산을 합니다.</div>
+            <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);">HMAC(시드값, 현재시각 ÷ 30) → 해시값 → 6자리 추출</div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(79,247,168,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--accent3);background:rgba(79,247,168,0.12);border:1px solid rgba(79,247,168,0.25);padding:3px 10px;border-radius:20px;">STEP 03</span>
+            <span style="font-weight:700;font-size:14px;">숫자 비교 → 인증</span>
+          </div>
+          <div style="padding:14px 18px;">
+            <div style="font-size:13px;color:var(--text-dim);">서버가 계산한 값 == 사용자가 입력한 값이면 인증 성공. 6자리가 일치한다는 것은 같은 시드값을 가졌다는 증명입니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 30초 만료 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;">
+        <p style="font-size:13px;font-weight:700;margin-bottom:12px;">⏱️ 30초 지나면 어떻게 될까?</p>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:12px;">
+          서버는 정확히 현재 구간만 허용하지 않고 <strong>앞뒤 1구간씩 총 90초</strong> 범위를 허용합니다.
+          폰과 서버의 시계가 완벽히 일치하지 않거나 타이핑 시간이 걸리기 때문입니다.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;font-size:12px;">
+          <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:10px;">
+            <div style="color:var(--text-dim);margin-bottom:4px;">이전 구간</div>
+            <div style="color:var(--accent);font-family:'Space Mono',monospace;">허용 ✅</div>
+          </div>
+          <div style="background:rgba(79,247,168,0.08);border:1px solid rgba(79,247,168,0.3);border-radius:8px;padding:10px;">
+            <div style="color:var(--text-dim);margin-bottom:4px;">현재 구간</div>
+            <div style="color:var(--accent3);font-family:'Space Mono',monospace;">허용 ✅</div>
+          </div>
+          <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:10px;">
+            <div style="color:var(--text-dim);margin-bottom:4px;">다음 구간</div>
+            <div style="color:var(--accent);font-family:'Space Mono',monospace;">허용 ✅</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.7;">
+          단, 한 번 사용된 OTP는 같은 구간 내 <strong>재사용 불가</strong>. 연속 실패 시 계정 잠금으로 무차별 대입 공격 차단.
+        </div>
+      </div>
+
+      <div class="highlight-box green" style="margin-bottom:0;">
+        ✅ <strong>OTP가 안전한 이유:</strong> 시드값은 최초 등록 시에만 전달되고 이후 네트워크 전송 없음. 30초마다 새 숫자가 생성되어 탈취해도 재사용 불가.
+      </div>
+    </div>
+
+    <!-- OTP 실습 -->
+    <div class="card">
+      <p style="font-size:15px;font-weight:700;margin-bottom:4px;">🧪 OTP 시뮬레이터</p>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">시드값을 설정하고 OTP를 생성해보세요. 같은 시드값이어야만 같은 숫자가 나옵니다.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">시드값 (비밀키)</label>
+          <input id="otp-seed" type="text" class="sim-inp" value="MySecretSeed2024">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">현재 시각 기준 구간</label>
+          <div id="otp-time-slot" style="padding:9px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);"></div>
+        </div>
+      </div>
+
+      <button onclick="otpGenerate()" style="width:100%;padding:11px;background:var(--accent);border:none;border-radius:8px;color:white;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;">📱 OTP 생성</button>
+
+      <div id="otp-out" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.3);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">이전 구간 OTP</div>
+            <div id="otp-prev" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--accent);letter-spacing:3px;"></div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">허용 범위</div>
+          </div>
+          <div style="background:rgba(79,247,168,0.08);border:2px solid rgba(79,247,168,0.4);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--accent3);margin-bottom:6px;">현재 OTP</div>
+            <div id="otp-curr" style="font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--accent3);letter-spacing:3px;"></div>
+            <div id="otp-countdown" style="font-size:10px;color:var(--text-dim);margin-top:4px;"></div>
+          </div>
+          <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.3);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">다음 구간 OTP</div>
+            <div id="otp-next" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--accent);letter-spacing:3px;"></div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">허용 범위</div>
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:6px;">OTP 입력 후 검증</label>
+          <div style="display:flex;gap:8px;">
+            <input id="otp-input" type="text" class="sim-inp" placeholder="6자리 입력" maxlength="6" style="flex:1;font-family:'Space Mono',monospace;font-size:16px;letter-spacing:4px;">
+            <button onclick="otpVerify()" style="padding:9px 18px;background:var(--accent);border:none;border-radius:8px;color:white;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">검증</button>
+          </div>
+        </div>
+        <div id="otp-verify-out"></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:10px;">💡 시드값을 바꾸면 완전히 다른 OTP가 생성됩니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────────────────────────────────────── -->
+  <!-- SECTION 06 : 비대칭 암호화란? -->
+  <!-- ────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">SECTION 06</div>
     <div class="section-title">비대칭 암호화란?</div>
 
     <div class="card">
@@ -571,7 +788,7 @@
           </div>
           <div style="padding:14px 18px;">
             <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">d×e ≡ 1 (mod φ(n))&nbsp;&nbsp;→&nbsp;&nbsp;d = <span style="color:var(--accent4);">23</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">7×23 = 161 = 4×40 + 1 → 161 mod 40 = 1 ✅<br>개인키 = (d=23, n=55). 절대 공개하지 않음.</div>
+            <div style="font-size:13px;color:var(--text-dim);">7×23 = 161 = 4×40 + 1 → 161 mod 40 = 1 ✅<br>개인키 = d=23. n=55는 공개키에도 포함된 공개값이므로 비밀이 아님.</div>
           </div>
         </div>
 
@@ -585,7 +802,7 @@
         </div>
         <div style="background:rgba(247,79,142,0.08);border:1px solid rgba(247,79,142,0.3);border-radius:10px;padding:14px;text-align:center;">
           <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4);margin-bottom:6px;">개인키 (PRIVATE)</div>
-          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--accent4);">(d=23, n=55)</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--accent4);">d = 23</div>
           <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">절대 비공개</div>
         </div>
       </div>
@@ -649,10 +866,10 @@
     </div>
   </div>
 ─────────────────────────── -->
-  <!-- SECTION 06 : 공개키 직접 확인하기 -->
+  <!-- SECTION 07 : 공개키 직접 확인하기 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 06</div>
+    <div class="section-label">SECTION 07</div>
     <div class="section-title">🔍 실습 — claude.ai 공개키 직접 확인하기</div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -715,10 +932,10 @@
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 07 : 활동 과제 — 키 탐정 -->
+  <!-- SECTION 08 : 활동 과제 — 키 탐정 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 07</div>
+    <div class="section-label">SECTION 08</div>
     <div class="section-title">🕵️ 활동 과제</div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -824,10 +1041,10 @@
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 08 : 확인 퀴즈 -->
+  <!-- SECTION 09 : 확인 퀴즈 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 08</div>
+    <div class="section-label">SECTION 09</div>
     <div class="section-title">📝 확인 퀴즈</div>
 
     <div class="quiz-item">
@@ -835,7 +1052,7 @@
       <ul class="quiz-options">
         <li><span>A</span> 같은 입력은 언제나 같은 해시값을 출력한다</li>
         <li><span>B</span> 해시값으로 원본 데이터를 복원할 수 있다</li>
-        <li><span>C</span> 입력이 1비트만 달라도 출력이 완전히 달라진다</li>
+        <li><span>C</span> 글자 하나(1바이트 이상)만 달라도 출력이 완전히 달라진다</li>
         <li><span>D</span> 입력 길이에 무관하게 출력 길이가 고정된다</li>
       </ul>
       <button class="show-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">정답 확인</button>
@@ -901,6 +1118,84 @@
 </div>
 
 <script>
+/* ── OTP 시뮬레이터 ── */
+var otpSeed = null;
+var otpTimer = null;
+
+async function otpHmac(seed, counter) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(seed), {name:'HMAC',hash:'SHA-1'}, false, ['sign']);
+  const buf = new ArrayBuffer(8);
+  const view = new DataView(buf);
+  view.setUint32(4, counter, false);
+  const sig = await crypto.subtle.sign('HMAC', key, buf);
+  const arr = new Uint8Array(sig);
+  const offset = arr[arr.length - 1] & 0x0f;
+  const code = ((arr[offset] & 0x7f) << 24 | arr[offset+1] << 16 | arr[offset+2] << 8 | arr[offset+3]) % 1000000;
+  return String(code).padStart(6, '0');
+}
+
+async function otpGenerate() {
+  const seed = document.getElementById('otp-seed').value;
+  if (!seed) { alert('시드값을 입력하세요'); return; }
+  otpSeed = seed;
+
+  const now = Math.floor(Date.now() / 1000);
+  const slot = Math.floor(now / 30);
+
+  const [prev, curr, next] = await Promise.all([
+    otpHmac(seed, slot - 1),
+    otpHmac(seed, slot),
+    otpHmac(seed, slot + 1)
+  ]);
+
+  document.getElementById('otp-prev').textContent = prev;
+  document.getElementById('otp-curr').textContent = curr;
+  document.getElementById('otp-next').textContent = next;
+  document.getElementById('otp-out').style.display = 'block';
+  document.getElementById('otp-verify-out').innerHTML = '';
+
+  const timeSlot = Math.floor(Date.now() / 1000);
+  document.getElementById('otp-time-slot').textContent = `구간 ${Math.floor(timeSlot/30)} (${30 - (timeSlot % 30)}초 후 갱신)`;
+
+  if (otpTimer) clearInterval(otpTimer);
+  otpTimer = setInterval(async () => {
+    const t = Math.floor(Date.now() / 1000);
+    const rem = 30 - (t % 30);
+    document.getElementById('otp-countdown').textContent = `${rem}초 후 만료`;
+    document.getElementById('otp-time-slot').textContent = `구간 ${Math.floor(t/30)} (${rem}초 후 갱신)`;
+    if (rem === 30) {
+      const s2 = Math.floor(t / 30);
+      const [p2, c2, n2] = await Promise.all([otpHmac(otpSeed, s2-1), otpHmac(otpSeed, s2), otpHmac(otpSeed, s2+1)]);
+      document.getElementById('otp-prev').textContent = p2;
+      document.getElementById('otp-curr').textContent = c2;
+      document.getElementById('otp-next').textContent = n2;
+    }
+  }, 1000);
+}
+
+async function otpVerify() {
+  if (!otpSeed) { alert('먼저 OTP를 생성하세요'); return; }
+  const input = document.getElementById('otp-input').value.trim();
+  if (input.length !== 6) { alert('6자리를 입력하세요'); return; }
+  const slot = Math.floor(Date.now() / 30000);
+  const [p, c, n] = await Promise.all([otpHmac(otpSeed, slot-1), otpHmac(otpSeed, slot), otpHmac(otpSeed, slot+1)]);
+  const ok = input === p || input === c || input === n;
+  const which = input === c ? '현재 구간' : input === p ? '이전 구간' : '다음 구간';
+  document.getElementById('otp-verify-out').innerHTML = `
+    <div style="background:${ok?'rgba(79,247,168,0.08)':'rgba(247,79,142,0.08)'};border:1px solid ${ok?'rgba(79,247,168,0.4)':'rgba(247,79,142,0.4)'};border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">${ok?'✅':'❌'}</div>
+      <div style="font-size:14px;font-weight:700;color:${ok?'var(--accent3)':'var(--accent4)'};">${ok?`인증 성공 (${which})` : '인증 실패 — OTP 불일치'}</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${ok?'서버와 같은 시드값으로 같은 숫자 생성 확인':'입력한 숫자가 허용 범위(이전/현재/다음 구간) 어디에도 없음'}</div>
+    </div>`;
+}
+
+// 페이지 로드 시 시간 구간 표시
+(function() {
+  const t = Math.floor(Date.now() / 1000);
+  const el = document.getElementById('otp-time-slot');
+  if (el) el.textContent = `구간 ${Math.floor(t/30)} (${30 - (t%30)}초 후 갱신)`;
+})();
+
 /* ── RSA 실습 ── */
 function isPrime(n) {
   if (n < 2) return false;
@@ -959,7 +1254,7 @@ function rsaGenKeys() {
   out.style.display = 'block';
   summary.innerHTML = `
     공개키: <strong style="color:var(--accent2);">(e=${e}, n=${n})</strong> — 누구에게나 공개<br>
-    개인키: <strong style="color:var(--accent4);">(d=${d}, n=${n})</strong> — 절대 비공개<br>
+    개인키: <strong style="color:var(--accent4);">d=${d}</strong> (n=${n}은 공개키에 포함된 공개값)<br>
     검증: e×d = ${e}×${d} = ${e*d}, ${e*d} mod ${phi} = <strong style="color:var(--accent3);">${(e*d)%phi}</strong> ✅ (반드시 1이어야 함)
   `;
   document.getElementById('rsa-crypto-out').innerHTML = '';
