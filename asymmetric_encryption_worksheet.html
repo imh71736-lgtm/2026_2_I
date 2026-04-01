@@ -245,8 +245,8 @@
       </div>
       <div class="mini-card" style="text-align:left;padding:16px;">
         <span class="icon" style="font-size:24px;">📱</span>
-        <h4>코로나 QR 인증</h4>
-        <p>개인 정보를 해시+서명해 QR에 담고, 위변조 시 즉시 탐지.</p>
+        <h4>코로나 백신 증명서 QR</h4>
+        <p>접종 정보를 해시+서명해 QR에 담고, 위변조 즉시 탐지. 오프라인 검증 가능.</p>
       </div>
       <div class="mini-card" style="text-align:left;padding:16px;">
         <span class="icon" style="font-size:24px;">📝</span>
@@ -350,11 +350,11 @@
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
     <div class="section-label">SECTION 04</div>
-    <div class="section-title">🧪 단방향 암호화 QR 인증 시뮬레이터</div>
+    <div class="section-title">🧪 코로나 백신 증명서 QR 인증 시뮬레이터</div>
 
     <div class="card" style="margin-bottom:20px;padding:20px;">
       <p style="font-size:13px;color:var(--text-dim);">
-        코로나 QR 인증 과정을 직접 체험합니다. <strong>정부 역할</strong>로 QR을 발급하고,
+        코로나 백신 증명서 QR 인증 과정을 직접 체험합니다. <strong>정부 역할</strong>로 QR을 발급하고,
         <strong>검사원 역할</strong>로 검증하고, <strong>위조범 역할</strong>로 탐지를 경험해보세요.
         실제 SHA-256과 HMAC이 동작합니다.
       </p>
@@ -362,27 +362,27 @@
 
     <!-- QR 요청 ~ 스캔 인증 흐름 설명 -->
     <div class="card" style="margin-bottom:20px;">
-      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">📡 QR 발급 요청 과정</p>
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">📡 코로나 백신 증명서 QR 발급 과정</p>
       <div class="flow-steps">
         <div class="flow-step" data-step="1">
           <div class="flow-step-title">본인 인증</div>
-          <div class="flow-step-body">앱 실행 시 휴대폰 번호 + 통신사 인증으로 본인 확인. 내 폰, 내 번호로만 로그인 가능해서 남의 QR을 발급받을 수 없습니다.</div>
+          <div class="flow-step-body">앱 설치 후 휴대폰 번호 + 주민번호 뒷자리로 본인 확인. 접종 이력이 있는 사람에게만 QR이 발급됩니다.</div>
         </div>
         <div class="flow-step" data-step="2">
           <div class="flow-step-title">서버에 QR 발급 요청</div>
-          <div class="flow-step-body">앱이 HTTPS로 서버에 요청합니다.<br>
-          <span class="ci">[사용자 앱] → HTTPS → [정부 서버] "QR 발급해줘"</span></div>
+          <div class="flow-step-body">앱이 HTTPS로 티켓 서버에 요청합니다.<br>
+          <span class="ci">[사용자 앱] → HTTPS → [질병관리청 서버] "백신 증명 QR 발급해줘"</span></div>
         </div>
         <div class="flow-step" data-step="3">
           <div class="flow-step-title">서버에서 QR 생성</div>
           <div class="flow-step-body">
-            서버가 DB에서 접종 정보를 꺼내 아래 과정을 수행합니다.<br>
-            ① 사용자 데이터 + 발급 시각 묶기 → ② SHA-256 해시 → ③ 정부 개인키로 전자서명 → ④ QR 이미지 생성
+            서버가 DB에서 접종 이력을 꺼내 아래 과정을 수행합니다.<br>
+            ① 이름 + 생년월일 + 접종여부 + 발급 시각 묶기 → ② SHA-256 해시 → ③ 질병관리청 개인키로 전자서명 → ④ QR 이미지 생성
           </div>
         </div>
         <div class="flow-step" data-step="4">
           <div class="flow-step-title">QR을 앱으로 전송 → 화면 표시</div>
-          <div class="flow-step-body">HTTPS로 QR 이미지를 내려보냅니다. QR은 <strong>15~30초</strong> 후 자동 만료되어 캡처 재사용이 불가능합니다.</div>
+          <div class="flow-step-body">HTTPS로 QR 이미지를 내려보냅니다. QR은 <strong>15~30초</strong> 후 자동 갱신되어 캡처 재사용이 불가능합니다.</div>
         </div>
       </div>
     </div>
@@ -391,33 +391,66 @@
       <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔍 QR 스캔 후 인증 과정</p>
       <div class="flow-steps">
         <div class="flow-step" data-step="1">
-          <div class="flow-step-title">QR 데이터 추출</div>
+          <div class="flow-step-title">QR 데이터 추출 — 원본 데이터는 평문으로 저장</div>
           <div class="flow-step-body">QR 안에는 두 가지가 들어있습니다.<br>
-          <span class="ci">① 원본 데이터</span> (이름, 접종여부, 발급시각) &nbsp;+&nbsp; <span class="ci">② 전자서명</span> (정부 개인키로 서명한 값)</div>
+          <span class="ci">① 원본 데이터 (평문)</span> 이름·생년월일·접종여부·발급시각이 <strong>암호화 없이 그대로</strong> 저장됩니다. 스캔만 하면 누구나 읽을 수 있습니다.<br><br>
+          <span class="ci">② 전자서명</span> SHA-256(원본 데이터)을 질병관리청 개인키로 암호화한 값. 위조 여부를 검증하는 용도입니다.<br><br>
+          <span style="font-size:12px;color:var(--accent4);">⚠️ 원본 데이터가 평문으로 들어있어 검사원 앱에서 이름·접종여부를 바로 표시할 수 있습니다. 반면 개인정보 노출 문제로 코로나 패스가 비판받기도 했습니다.</span>
+          </div>
         </div>
         <div class="flow-step" data-step="2">
-          <div class="flow-step-title">공개키로 서명 복호화 → 해시A 추출</div>
-          <div class="flow-step-body">검사원 앱에 미리 설치된 <strong>정부 공개키</strong>로 전자서명을 복호화합니다.<br>
-          <span class="ci">해시A = 공개키(전자서명)</span></div>
+          <div class="flow-step-title">이름·접종여부 화면 표시</div>
+          <div class="flow-step-body">① 원본 데이터(평문)를 그대로 읽어 검사원 앱 화면에 표시합니다.<br>
+          → 홍길동 / 백신 접종 완료 / 2022-03-01 발급<br>
+          검사원이 눈으로 직접 확인하는 단계입니다.</div>
         </div>
         <div class="flow-step" data-step="3">
-          <div class="flow-step-title">원본 데이터 직접 해시 → 해시B 계산</div>
-          <div class="flow-step-body">QR의 원본 데이터를 앱이 직접 SHA-256으로 계산합니다.<br>
-          <span class="ci">해시B = SHA-256(원본 데이터)</span></div>
+          <div class="flow-step-title">공개키로 서명 복호화 → 해시A 추출</div>
+          <div class="flow-step-body">검사원 앱에 미리 설치된 <strong>질병관리청 공개키</strong>로 전자서명을 복호화합니다.
+          인터넷 없이도 오프라인 검증이 가능합니다.<br>
+          <span class="ci">해시A = 공개키(전자서명)</span></div>
         </div>
         <div class="flow-step" data-step="4">
-          <div class="flow-step-title">해시A == 해시B 비교</div>
+          <div class="flow-step-title">원본 데이터 직접 해시 → 해시B 계산</div>
+          <div class="flow-step-body">QR의 원본 데이터(평문)를 앱이 직접 SHA-256으로 계산합니다.<br>
+          <span class="ci">해시B = SHA-256(원본 데이터)</span></div>
+        </div>
+        <div class="flow-step" data-step="5">
+          <div class="flow-step-title">해시A == 해시B 비교 → 위조 검증</div>
           <div class="flow-step-body">
-            일치 → ✅ 입장 허가 &nbsp;|&nbsp; 불일치 → ❌ 위조 탐지<br>
+            일치 → ✅ 데이터 위조 없음 &nbsp;|&nbsp; 불일치 → ❌ 위조 탐지<br>
             이후 발급 시각 확인 — 30초 초과 시 만료 처리
           </div>
         </div>
-        <div class="flow-step" data-step="5">
+        <div class="flow-step" data-step="6">
           <div class="flow-step-title">신분증 대조 (마지막 방어선)</div>
-          <div class="flow-step-body">QR의 이름·생년월일과 실제 신분증을 대조합니다. QR 위조는 해시+서명으로, <strong>사람 바꿔치기</strong>는 신분증 대조로 막는 이중 구조입니다.</div>
+          <div class="flow-step-body">QR의 이름과 실제 신분증을 대조합니다. QR 위조는 해시+서명으로, <strong>대리 사용</strong>은 신분증 대조로 막는 이중 구조입니다.</div>
         </div>
       </div>
-      <div class="highlight-box green" style="margin-bottom:0;margin-top:16px;">
+
+      <!-- QR 구성 요약표 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:16px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">📦 QR 안에 담긴 내용 정리</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="padding:8px 10px;text-align:left;color:var(--accent);font-weight:700;">항목</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--accent);font-weight:700;">암호화 여부</th>
+            <th style="padding:8px 10px;text-align:left;color:var(--accent);font-weight:700;">목적</th>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 10px;color:var(--text);">원본 데이터<br><span style="font-size:11px;color:var(--text-dim);">(이름, 접종여부, 생년월일 등)</span></td>
+            <td style="padding:8px 10px;color:var(--accent4);">❌ 평문 그대로</td>
+            <td style="padding:8px 10px;color:var(--text-dim);">이름·접종여부 화면 표시<br>해시 재계산의 재료</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 10px;color:var(--text);">전자서명<br><span style="font-size:11px;color:var(--text-dim);">(해시를 개인키로 암호화)</span></td>
+            <td style="padding:8px 10px;color:var(--accent3);">✅ 개인키 암호화</td>
+            <td style="padding:8px 10px;color:var(--text-dim);">원본 데이터 위조 여부 검증</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="highlight-box green" style="margin-bottom:0;margin-top:14px;">
         ✅ <strong>오프라인 검증 가능:</strong> 공개키는 앱에 미리 설치되어 있고 해시 계산은 기기 안에서 이루어지므로, 인터넷이 없어도 QR 검증이 정상 작동합니다.
       </div>
     </div>
@@ -450,7 +483,7 @@
             <input id="s-exp" type="text" class="sim-inp" value="2022-12-31">
           </div>
         </div>
-        <button class="sim-btn" onclick="issueQR()">🏛️ QR 코드 발급하기</button>
+        <button class="sim-btn" onclick="issueQR()">🏛️ 백신 증명 QR 발급하기</button>
         <div id="issue-out" style="display:none;">
           <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;font-family:'Space Mono',monospace;letter-spacing:1px;">STEP 1 — 원본 데이터</div>
           <div id="s-raw" class="hex-box" style="color:var(--accent3);"></div>
@@ -489,10 +522,7 @@
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
               <div>
                 <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">백신 접종 (위조)</label>
-                <select id="t-vacc" class="sim-sel" style="border-color:rgba(247,79,142,0.4);">
-                  <option value="완료">미완료 → 완료로 위조!</option>
-                  <option value="미완료">원본 유지</option>
-                </select>
+                <select id="t-vacc" class="sim-sel" style="border-color:rgba(247,79,142,0.4);"><option value="완료">미완료 → 완료로 위조!</option><option value="미완료">원본 유지</option></select>
               </div>
               <div>
                 <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">유효기간 (위조)</label>
@@ -514,7 +544,7 @@
         <div class="write-area">여기에 적어보세요...</div>
       </div>
       <div class="act-box">
-        <div class="act-title">Q2. 위조범이 데이터를 바꿨을 때 어떻게 탐지됐나요? 어떤 값이 달랐나요?</div>
+        <div class="act-title">Q2. 위조범이 접종 여부를 바꿨을 때 어떻게 탐지됐나요? 어떤 값이 달랐나요?</div>
         <div class="write-area">여기에 적어보세요...</div>
       </div>
       <div class="act-box">
@@ -1162,7 +1192,7 @@
     </div>
 
     <div class="quiz-item">
-      <div class="quiz-q">Q4. 코로나 QR에서 위조를 탐지하는 핵심 원리는?</div>
+      <div class="quiz-q">Q4. 코로나 백신 증명서 QR에서 위조를 탐지하는 핵심 원리는?</div>
       <ul class="quiz-options">
         <li><span>A</span> 데이터를 바꾸면 해시값이 달라져 원본 서명과 일치하지 않는다</li>
         <li><span>B</span> QR 코드 자체에 위조 방지 잉크가 사용된다</li>
