@@ -171,7 +171,8 @@
     <div class="card">
       <p style="font-size:15px;line-height:1.9;margin-bottom:16px;">
         <strong>단방향 암호화(해시 함수)</strong>는 어떤 데이터든 받아 <strong style="color:var(--accent)">고정 길이의 문자열</strong>로 변환합니다.
-        핵심은 <em>되돌릴 수 없다</em>는 점입니다. 결과값(해시)으로 원본을 복원하는 것은 현실적으로 불가능합니다.
+        핵심은 <em>되돌릴 수 없다</em>는 점입니다. 결과값(해시)으로 원본을 복원하는 것은 원칙적으로 불가능합니다.
+        <span style="font-size:13px;color:var(--text-dim);">(단, 모든 경우를 시도하는 무차별 대입 공격은 이론적으로 가능하지만 현실적으로 불가능)</span>
       </p>
       <div class="two-col">
         <div class="mini-card">
@@ -187,18 +188,19 @@
         <div class="mini-card">
           <span class="icon">🌪️</span>
           <h4>눈사태 효과</h4>
-          <p>입력이 조금만 바뀌어도<br>출력이 <strong>완전히</strong> 달라짐</p>
+          <p>입력이 1비트만 바뀌어도<br>결과가 <strong>완전히</strong> 달라짐</p>
         </div>
         <div class="mini-card">
           <span class="icon">🛡️</span>
           <h4>충돌 저항성</h4>
-          <p>같은 해시값을 가진<br>두 입력을 찾기 극도로 어려움</p>
+          <p>서로 다른 두 입력이 같은 해시값을 갖는 경우를 "충돌"이라 하며, 이를 찾기가 극도로 어려움</p>
         </div>
       </div>
     </div>
 
     <div class="highlight-box yellow">
-      💡 <strong>비유:</strong> 커피를 원두로 되돌릴 수 없듯이, 해시값으로 원본 데이터를 복원할 수 없습니다.
+      💡 <strong>비유:</strong> 커피를 원두로 되돌릴 수 없듯이, 해시값으로 원본 데이터를 복원하는 것은 원칙적으로 불가능합니다.
+      <span style="font-size:12px;color:var(--text-dim);display:block;margin-top:6px;">(단, 모든 경우를 시도하는 무차별 대입 공격은 이론적으로 가능하지만 현실적으로 불가능)</span>
     </div>
   </div>
 
@@ -221,7 +223,6 @@
           <tr><td>SHA-1</td><td>160비트 (40자)</td><td style="color:var(--accent4)">⚠️ 퇴출</td><td>구버전 인증서</td></tr>
           <tr><td>SHA-256</td><td>256비트 (64자)</td><td style="color:var(--accent3)">✅ 표준</td><td>비밀번호, 블록체인, QR 인증</td></tr>
           <tr><td>SHA-3</td><td>256~512비트</td><td style="color:var(--accent3)">✅ 차세대</td><td>차세대 보안 시스템</td></tr>
-          <tr><td>bcrypt</td><td>가변</td><td style="color:var(--accent3)">✅ 권장</td><td>비밀번호 전용 (일부러 느림)</td></tr>
         </tbody>
       </table>
     </div>
@@ -287,7 +288,7 @@
 
       <!-- 눈사태 효과 -->
       <div style="margin-bottom:8px;">
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">🌪️ 눈사태 효과 — 1글자 차이가 얼마나 달라지나?</div>
+        <div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">🌪️ 눈사태 효과 — 입력이 1비트(글자 하나)만 달라도 출력이 완전히 달라집니다</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;">
             <div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">입력 A</div>
@@ -592,7 +593,7 @@
       <p style="font-size:15px;font-weight:700;margin-bottom:14px;">📱 OTP — 대칭키의 대표 응용</p>
       <p style="font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:18px;">
         OTP(One-Time Password)는 서버와 내 기기가 <strong>같은 비밀키(시드값)</strong>를 공유하고,
-        같은 알고리즘으로 같은 숫자를 동시에 계산하는 대칭키 방식입니다.
+        같은 시간 기준으로 동일한 OTP 값을 계산하는 대칭키 방식입니다.
       </p>
 
       <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">
@@ -651,12 +652,12 @@
           </div>
         </div>
         <div style="font-size:12px;color:var(--text-dim);margin-top:10px;line-height:1.7;">
-          단, 한 번 사용된 OTP는 같은 구간 내 <strong>재사용 불가</strong>. 연속 실패 시 계정 잠금으로 무차별 대입 공격 차단.
+          일부 서비스는 보안을 위해 같은 OTP의 재사용을 막습니다 (서버 정책에 따라 다름). 연속 실패 시 계정 잠금으로 무차별 대입 공격 차단.
         </div>
       </div>
 
       <div class="highlight-box green" style="margin-bottom:0;">
-        ✅ <strong>OTP가 안전한 이유:</strong> 시드값은 최초 등록 시에만 전달되고 이후 네트워크 전송 없음. 30초마다 새 숫자가 생성되어 탈취해도 재사용 불가.
+        ⚠️ <strong>시드값 보안:</strong> 시드값이 탈취되면 공격자는 동일한 OTP를 생성할 수 있으므로 매우 위험합니다. 시드값은 최초 등록 시에만 전달되며 이후 네트워크로 전송되지 않습니다.
       </div>
     </div>
 
@@ -712,327 +713,182 @@
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 06 : 비대칭 암호화란? -->
+  <!-- SECTION 05-B : 비대칭 암호화 개념 & RSA -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 06</div>
-    <div class="section-title">비대칭 암호화란?</div>
+    <div class="section-label">SECTION 05-B</div>
+    <div class="section-title">🔑 비대칭 암호화(RSA) 개념 &amp; 원리</div>
 
-    <div class="card">
-      <p style="font-size:15px;line-height:1.9;margin-bottom:16px;">
-        <strong>비대칭 암호화</strong>는 암호화 키와 복호화 키가 <strong style="color:var(--accent)">서로 다른</strong> 방식입니다.
-        수학적으로 연결된 두 키(공개키 / 개인키)를 사용하며, 한 키로 암호화한 내용은 반드시 다른 키로만 풀 수 있습니다.
+    <!-- 개념 카드 -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">비대칭 암호화란?</p>
+      <p style="font-size:14px;line-height:1.9;margin-bottom:18px;">
+        <strong>비대칭 암호화</strong>는 암호화와 복호화에 <strong style="color:var(--accent2)">서로 다른 두 개의 키</strong>를 사용하는 방식입니다.
+        공개적으로 배포하는 <strong>공개키(Public Key)</strong>로 암호화하고,
+        본인만 갖고 있는 <strong>개인키(Private Key)</strong>로 복호화합니다.
+        <strong style="color:var(--accent3);">공개키로 암호화한 데이터는 대응되는 개인키로만 복호화할 수 있습니다.</strong>
       </p>
+      <div class="key-pair">
+        <div class="key-card pub">
+          <span class="key-icon">🔓</span>
+          <div class="key-tag">PUBLIC KEY</div>
+          <h4>공개키</h4>
+          <p class="key-desc">누구에게나 공개.<br>이 키로 <strong>암호화</strong> 또는<br>서명 <strong>검증</strong>에 사용됨.</p>
+        </div>
+        <div class="vs">⇄</div>
+        <div class="key-card prv">
+          <span class="key-icon">🔐</span>
+          <div class="key-tag">PRIVATE KEY</div>
+          <h4>개인키</h4>
+          <p class="key-desc">절대 공개하지 않음.<br>이 키로 <strong>복호화</strong> 또는<br>서명 <strong>생성</strong>에 사용됨.</p>
+        </div>
+      </div>
+      <div class="highlight-box yellow" style="margin-bottom:0;margin-top:4px;">
+        💡 <strong>비유:</strong> 공개키는 누구나 넣을 수 있는 우편함 투입구, 개인키는 그 우편함을 여는 열쇠입니다. 투입구로 넣은 편지는 열쇠 없이 꺼낼 수 없습니다.
+      </div>
+    </div>
+
+    <!-- 암호화 vs 서명 흐름 -->
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">📡 두 가지 사용 방식</p>
       <div class="two-col">
-        <div class="mini-card">
-          <span class="icon">🔒</span>
-          <h4>대칭 암호화</h4>
-          <p>자물쇠 하나, 열쇠 하나.<br>키 전달 중 도난 위험.</p>
+        <div class="mini-card" style="text-align:left;padding:18px;">
+          <span class="icon" style="font-size:22px;">🔒</span>
+          <h4>암호화 / 복호화</h4>
+          <p style="line-height:1.8;">
+            <strong style="color:var(--accent2);">공개키</strong>로 암호화<br>
+            → <strong style="color:var(--accent4);">개인키</strong>로 복호화<br>
+            <span style="font-size:11px;color:var(--text-dim);">수신자의 공개키로 잠가서 수신자만 열 수 있게</span>
+          </p>
         </div>
-        <div class="mini-card">
-          <span class="icon">📬</span>
-          <h4>비대칭 암호화</h4>
-          <p>우편함처럼 투입구(공개키)는 공개,<br>열쇠(개인키)는 나만 보관.</p>
+        <div class="mini-card" style="text-align:left;padding:18px;">
+          <span class="icon" style="font-size:22px;">✍️</span>
+          <h4>전자서명 / 검증</h4>
+          <p style="line-height:1.8;">
+            <strong style="color:var(--accent4);">개인키</strong>로 서명<br>
+            → <strong style="color:var(--accent2);">공개키</strong>로 검증<br>
+            <span style="font-size:11px;color:var(--text-dim);">발신자가 서명, 누구나 공개키로 진위 확인</span>
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="key-pair">
-      <div class="key-card pub">
-        <span class="key-icon">🗝️</span>
-        <div class="key-tag">PUBLIC KEY</div>
-        <h4>공개키</h4>
-        <p class="key-desc">세상에 공개해도 되는 키.<br>암호화만 가능, 복호화 불가.<br><br>📌 메시지를 <em>잠그는</em> 역할</p>
-      </div>
-      <div class="vs">≠</div>
-      <div class="key-card prv">
-        <span class="key-icon">🔑</span>
-        <div class="key-tag">PRIVATE KEY</div>
-        <h4>개인키</h4>
-        <p class="key-desc">오직 나만 보관하는 비밀 키.<br>공개키로 암호화한 내용만 복호화.<br><br>📌 메시지를 <em>여는</em> 역할</p>
-      </div>
-    </div>
-
-    <div class="highlight-box yellow">
-      💡 <strong>핵심 규칙:</strong> 공개키로 잠근 것 → 개인키로만 열 수 있음 | 개인키로 서명한 것 → 공개키로 검증 가능
-    </div>
-
-    <!-- RSA 수학적 원리 -->
-    <div class="card" style="margin-top:20px;">
+    <!-- RSA 키 생성 수학 원리 -->
+    <div class="card" style="margin-bottom:20px;">
       <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔢 RSA 키 생성 수학 원리</p>
-      <p style="font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:20px;">
-        RSA는 <strong>"큰 수의 소인수분해는 현실적으로 불가능하다"</strong>는 원리를 이용합니다.<br>
-        아래 5단계로 공개키와 개인키가 만들어집니다.
-      </p>
-
-      <div style="display:flex;flex-direction:column;gap:12px;">
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(79,142,247,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.25);padding:3px 10px;border-radius:20px;">STEP 01</span>
-            <span style="font-weight:700;font-size:14px;">소수 p, q 선택</span>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">p = 5,&nbsp;&nbsp;q = 11</div>
-            <div style="font-size:13px;color:var(--text-dim);">실제 RSA에서는 p, q가 각각 1024비트 이상의 소수. 여기선 이해를 위해 작은 수 사용.</div>
-          </div>
-        </div>
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(79,142,247,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.25);padding:3px 10px;border-radius:20px;">STEP 02</span>
-            <span style="font-weight:700;font-size:14px;">n = p × q 계산</span>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">n = 5 × 11 = <span style="color:var(--accent);">55</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">n은 공개키와 개인키에 모두 사용되는 공통값. 누구나 알 수 있지만 p, q를 역산하기가 극도로 어려움.</div>
-          </div>
-        </div>
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(79,142,247,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.25);padding:3px 10px;border-radius:20px;">STEP 03</span>
-            <span style="font-weight:700;font-size:14px;">φ(n) = (p−1)(q−1) 계산</span>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">φ(n) = (5−1)(11−1) = 4×10 = <span style="color:var(--accent2);">40</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">오일러 파이 함수. 1~n 사이에서 n과 서로소인 수의 개수. 개인키 d를 구하는 데 필요.</div>
-          </div>
-        </div>
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(247,193,79,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent2);background:rgba(247,193,79,0.12);border:1px solid rgba(247,193,79,0.25);padding:3px 10px;border-radius:20px;">STEP 04</span>
-            <span style="font-weight:700;font-size:14px;">공개키 e 선택 → 공개키 완성</span>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">e = <span style="color:var(--accent2);">7</span>&nbsp;&nbsp;→&nbsp;&nbsp;공개키 = (e=7, n=55)</div>
-            <div style="font-size:13px;color:var(--text-dim);">e는 1 &lt; e &lt; φ(n)이고 φ(n)과 서로소인 수. 보통 65537을 씀. 이 (e, n)을 세상에 공개.</div>
-          </div>
-        </div>
-
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(247,79,142,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent4);background:rgba(247,79,142,0.12);border:1px solid rgba(247,79,142,0.25);padding:3px 10px;border-radius:20px;">STEP 05</span>
-            <span style="font-weight:700;font-size:14px;">개인키 d 계산 → 개인키 완성</span>
-          </div>
-          <div style="padding:14px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text);">d×e ≡ 1 (mod φ(n))&nbsp;&nbsp;→&nbsp;&nbsp;d = <span style="color:var(--accent4);">23</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">7×23 = 161 = 4×40 + 1 → 161 mod 40 = 1 ✅<br>개인키 = d=23. n=55는 공개키에도 포함된 공개값이므로 비밀이 아님.</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
-        <div style="background:rgba(247,193,79,0.08);border:1px solid rgba(247,193,79,0.3);border-radius:10px;padding:14px;text-align:center;">
-          <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent2);margin-bottom:6px;">공개키 (PUBLIC)</div>
-          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--accent2);">(e=7, n=55)</div>
-          <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">세상에 공개</div>
-        </div>
-        <div style="background:rgba(247,79,142,0.08);border:1px solid rgba(247,79,142,0.3);border-radius:10px;padding:14px;text-align:center;">
-          <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4);margin-bottom:6px;">개인키 (PRIVATE)</div>
-          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--accent4);">d = 23</div>
-          <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">절대 비공개</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 암호화/복호화 과정 설명 -->
-    <div class="card" style="margin-bottom:20px;">
-      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔒 암호화 &amp; 복호화 과정</p>
-      <p style="font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:18px;">
-        키가 만들어지면 실제로 어떻게 암호화하고 복호화하는지 수식으로 확인해봅니다.<br>
-        원문 m=9, 공개키 (e=7, n=55), 개인키 d=23 을 예시로 사용합니다.
-      </p>
-
-      <div style="display:flex;flex-direction:column;gap:12px;">
-
-        <!-- 암호화 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(247,193,79,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent2);background:rgba(247,193,79,0.12);border:1px solid rgba(247,193,79,0.25);padding:3px 10px;border-radius:20px;">암호화</span>
-            <span style="font-weight:700;font-size:14px;">공개키(e, n)로 원문 m을 잠금</span>
-          </div>
-          <div style="padding:16px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:10px;">c = m<sup>e</sup> mod n</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);margin-bottom:8px;">c = 9<sup>7</sup> mod 55 = 4782969 mod 55 = <span style="color:var(--accent2);font-size:16px;">4</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">원문 9가 암호문 4로 변환됩니다. 공개키(e=7, n=55)는 누구나 알지만, 4만 보고 9를 역산하는 것은 불가능합니다.</div>
-          </div>
-        </div>
-
-        <div style="text-align:center;font-size:20px;color:var(--text-dim);">↓ 네트워크로 암호문 전송</div>
-
-        <!-- 복호화 -->
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
-          <div style="background:rgba(247,79,142,0.08);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent4);background:rgba(247,79,142,0.12);border:1px solid rgba(247,79,142,0.25);padding:3px 10px;border-radius:20px;">복호화</span>
-            <span style="font-weight:700;font-size:14px;">개인키(d, n)로 암호문 c를 열기</span>
-          </div>
-          <div style="padding:16px 18px;">
-            <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--accent4);margin-bottom:10px;">m = c<sup>d</sup> mod n</div>
-            <div style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);margin-bottom:8px;">m = 4<sup>23</sup> mod 55 = <span style="color:var(--accent4);font-size:16px;">9</span></div>
-            <div style="font-size:13px;color:var(--text-dim);">암호문 4에 개인키 d=23을 적용하면 원문 9가 정확히 복원됩니다. d를 모르면 절대 복원 불가능합니다.</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- 왜 성립하나 -->
-      <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.25);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:16px 20px;margin-top:16px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">왜 c^d mod n이 원문 m을 돌려주나?</div>
-
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">① 복호화 식을 풀어쓰면:</div>
-        <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text);line-height:2.2;background:rgba(0,0,0,0.2);border-radius:6px;padding:12px 14px;margin-bottom:12px;">
-          c<sup>d</sup> mod n<br>
-          = (m<sup>e</sup>)<sup>d</sup> mod n &nbsp;&nbsp;<span style="color:var(--text-dim);">← c = m^e 이므로</span><br>
-          = m<sup>e×d</sup> mod n
-        </div>
-
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">② e×d를 분해하면:</div>
-        <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text);line-height:2.2;background:rgba(0,0,0,0.2);border-radius:6px;padding:12px 14px;margin-bottom:12px;">
-          e×d = 7×23 = 161<br>
-          161 = 4×40 + 1 &nbsp;&nbsp;<span style="color:var(--text-dim);">← φ(n)=40으로 나누면 몫 4, 나머지 1</span><br>
-          = 4×φ(n) + 1
-        </div>
-
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;">③ 오일러 정리 적용:</div>
-        <div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text);line-height:2.2;background:rgba(0,0,0,0.2);border-radius:6px;padding:12px 14px;margin-bottom:12px;">
-          m<sup>e×d</sup> mod n<br>
-          = m<sup>4×φ(n) + 1</sup> mod n<br>
-          = m<sup>4×φ(n)</sup> × m<sup>1</sup> mod n<br>
-          = (m<sup>φ(n)</sup>)<sup>4</sup> × m mod n<br>
-          = 1<sup>4</sup> × m mod n &nbsp;&nbsp;<span style="color:var(--text-dim);">← 오일러 정리: m^φ(n) mod n = 1</span><br>
-          = <span style="color:var(--accent3);font-size:14px;font-weight:700;">m</span> &nbsp;&nbsp;<span style="color:var(--text-dim);">← 원문 복원 완료!</span>
-        </div>
-
-        <div style="font-size:12px;color:var(--text-dim);line-height:1.7;">
-          핵심: e×d를 φ(n)으로 나눈 나머지가 <strong>반드시 1</strong>이 되도록 d를 설계했기 때문에,<br>
-          m^(e×d) mod n이 결국 m으로 돌아옵니다.
-        </div>
-      </div>
-
-      <!-- n이 소수의 곱인 이유 -->
-      <div class="highlight-box yellow" style="margin-top:14px;margin-bottom:0;">
-        💡 <strong>n = p × q (소수의 곱)인 이유:</strong> n을 보고 p, q를 역산해야 φ(n)을 구할 수 있고, φ(n)이 있어야 d를 구할 수 있습니다. n이 2048비트짜리 거대한 수가 되면 이 역산이 현실적으로 불가능하기 때문에 RSA가 안전합니다.
-      </div>
-    </div>
-    <div class="card">
-      <p style="font-size:15px;font-weight:700;margin-bottom:4px;">🧪 RSA 키 생성 & 암호화 실습</p>
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">p, q를 직접 입력해 키를 생성하고, 숫자를 암호화/복호화해보세요.</p>
-
-      <!-- 키 생성 -->
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">① 소수 입력 → 키 생성</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-          <div>
-            <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">소수 p</label>
-            <input id="rsa-p" type="number" class="sim-inp" value="5" min="2" max="100">
-          </div>
-          <div>
-            <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">소수 q</label>
-            <input id="rsa-q" type="number" class="sim-inp" value="11" min="2" max="100">
-          </div>
-        </div>
-        <button onclick="rsaGenKeys()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:8px;color:white;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;">🔑 키 생성하기</button>
-        <div id="rsa-key-out" style="display:none;">
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;">
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
-              <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">n = p×q</div>
-              <div id="rsa-n" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);"></div>
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
-              <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">φ(n)</div>
-              <div id="rsa-phi" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent2);"></div>
-            </div>
-            <div style="background:rgba(247,193,79,0.08);border:1px solid rgba(247,193,79,0.3);border-radius:8px;padding:10px;text-align:center;">
-              <div style="font-size:10px;color:var(--accent2);margin-bottom:4px;">공개키 e</div>
-              <div id="rsa-e" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent2);"></div>
-            </div>
-            <div style="background:rgba(247,79,142,0.08);border:1px solid rgba(247,79,142,0.3);border-radius:8px;padding:10px;text-align:center;">
-              <div style="font-size:10px;color:var(--accent4);margin-bottom:4px;">개인키 d</div>
-              <div id="rsa-d" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent4);"></div>
-            </div>
-          </div>
-          <div id="rsa-key-summary" style="font-size:12px;color:var(--text-dim);background:rgba(79,142,247,0.05);border:1px solid var(--border);border-radius:8px;padding:10px;line-height:1.8;"></div>
-        </div>
-      </div>
-
-      <!-- 암호화/복호화 -->
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px;">② 숫자 암호화 / 복호화</div>
-        <div style="margin-bottom:10px;">
-          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">암호화할 숫자 m (0 &lt; m &lt; n)</label>
-          <input id="rsa-m" type="number" class="sim-inp" value="9" min="1">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-          <button onclick="rsaEncrypt()" style="padding:10px;background:rgba(247,193,79,0.15);border:1px solid rgba(247,193,79,0.4);border-radius:8px;color:var(--accent2);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🔒 공개키로 암호화</button>
-          <button onclick="rsaDecrypt()" style="padding:10px;background:rgba(247,79,142,0.15);border:1px solid rgba(247,79,142,0.4);border-radius:8px;color:var(--accent4);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🔓 개인키로 복호화</button>
-        </div>
-        <div id="rsa-crypto-out"></div>
-      </div>
-    </div>
-  </div>
-─────────────────────────── -->
-  <!-- SECTION 07 : 공개키 직접 확인하기 -->
-  <!-- ────────────────────────────────────────────────── -->
-  <div class="section">
-    <div class="section-label">SECTION 07</div>
-    <div class="section-title">🔍 실습 — claude.ai 공개키 직접 확인하기</div>
-
-    <div class="card" style="margin-bottom:20px;">
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">엣지 브라우저에서 claude.ai의 실제 공개키를 확인하는 방법입니다.</p>
       <div class="flow-steps">
         <div class="flow-step" data-step="1">
-          <div class="flow-step-title">🔒 자물쇠 클릭</div>
-          <div class="flow-step-body">주소창 왼쪽 <span class="ci">🔒</span> 클릭</div>
+          <div class="flow-step-title">두 소수 p, q 선택</div>
+          <div class="flow-step-body">
+            서로 다른 큰 소수 두 개를 고릅니다.<br>
+            <span class="ci">예) p = 61, q = 53</span>
+          </div>
         </div>
         <div class="flow-step" data-step="2">
-          <div class="flow-step-title">"인증서가 유효합니다" 클릭</div>
-          <div class="flow-step-body">연결 안전 팝업에서 인증서 항목 클릭</div>
+          <div class="flow-step-title">n = p × q 계산 (공개값)</div>
+          <div class="flow-step-body">
+            두 수의 곱 n은 공개키와 개인키 모두에 포함됩니다.<br>
+            <span class="ci">n = 61 × 53 = 3233</span>
+          </div>
         </div>
         <div class="flow-step" data-step="3">
-          <div class="flow-step-title">"세부 정보" 탭</div>
-          <div class="flow-step-body">인증서 창 상단 세부 정보 탭 선택</div>
+          <div class="flow-step-title">φ(n) = (p−1)(q−1) 계산 (오일러 피 함수)</div>
+          <div class="flow-step-body">
+            n보다 작으면서 n과 서로소인 양의 정수의 개수입니다.<br>
+            <span class="ci">φ(3233) = 60 × 52 = 3120</span>
+          </div>
         </div>
         <div class="flow-step" data-step="4">
-          <div class="flow-step-title">"공개 키" 항목 확인</div>
-          <div class="flow-step-body">스크롤하여 주체 공개 키 정보 클릭</div>
+          <div class="flow-step-title">공개키 e 선택</div>
+          <div class="flow-step-body">
+            1 &lt; e &lt; φ(n) 이고, gcd(e, φ(n)) = 1 을 만족하는 e를 선택합니다.<br>
+            <span class="ci">e = 17 (gcd(17, 3120) = 1 ✅)</span>
+          </div>
+        </div>
+        <div class="flow-step" data-step="5">
+          <div class="flow-step-title">개인키 d 계산</div>
+          <div class="flow-step-body">
+            e × d ≡ 1 (mod φ(n)) 을 만족하는 d를 구합니다 (모듈러 역원).<br>
+            <span class="ci">17 × 2753 = 46801 = 15×3120 + 1 → d = 2753</span>
+          </div>
+        </div>
+        <div class="flow-step" data-step="6">
+          <div class="flow-step-title">키 쌍 완성</div>
+          <div class="flow-step-body">
+            <strong style="color:var(--accent2);">공개키: (e, n) = (17, 3233)</strong> — 공개 배포<br>
+            <strong style="color:var(--accent4);">개인키: (d, n) = (2753, 3233)</strong> — 비밀 보관<br>
+            <span style="font-size:11px;color:var(--text-dim);">p, q, φ(n)은 키 생성 후 폐기합니다.</span>
+          </div>
         </div>
       </div>
+
+      <!-- 암복호화 수식 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;">
+        <div style="background:rgba(247,193,79,0.06);border:1px solid rgba(247,193,79,0.3);border-radius:10px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--accent2);font-family:'Space Mono',monospace;margin-bottom:8px;letter-spacing:1px;">암호화 (공개키)</div>
+          <div style="font-family:'Space Mono',monospace;font-size:16px;color:var(--text);">c = m<sup>e</sup> mod n</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">평문 m → 암호문 c</div>
+        </div>
+        <div style="background:rgba(247,79,142,0.06);border:1px solid rgba(247,79,142,0.3);border-radius:10px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--accent4);font-family:'Space Mono',monospace;margin-bottom:8px;letter-spacing:1px;">복호화 (개인키)</div>
+          <div style="font-family:'Space Mono',monospace;font-size:16px;color:var(--text);">m = c<sup>d</sup> mod n</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">암호문 c → 평문 m</div>
+        </div>
+      </div>
+
+      <div class="highlight-box pink" style="margin-top:16px;margin-bottom:0;">
+        🔒 <strong>보안의 핵심:</strong> n을 소인수분해해서 p와 q를 알아내지 못하는 한 개인키 d를 구할 수 없습니다. 실제 RSA는 2048비트 이상의 거대한 수를 사용해 현실적으로 해독이 불가능합니다.
+      </div>
     </div>
 
-    <div class="card" style="margin-bottom:20px;">
-      <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">📋 실제로 보이는 값 (예시 — claude.ai ECC 공개키)</p>
-      <div class="hex-box" style="color:var(--accent3);">
-        00 04 5C C5 39 FD AA D1 10 C5 65 C6 8E 45 7E 18<br>
-        66 BD B0 98 CD 79 AB BC 39 25 70 BF C8 DC EC BC<br>
-        B9 7F F2 3C 30 C6 73 0A AA BF 67 05 B5 36 6B 21<br>
-        43 74 E1 DD A9 B0 6E D2 12 C8 83 A5 3C 0D 82 73
-      </div>
-      <div class="highlight-box" style="margin-top:14px;margin-bottom:0;">
-        💡 <span class="ci">00 04</span> 로 시작 → <strong>ECC 비압축 공개키</strong> 표시. 각 두 자리(XX) = 1바이트 = 8비트. 순서대로 이어 붙이면 하나의 거대한 좌표값이 됩니다.
-      </div>
-    </div>
-
-    <!-- 공개키 비교 -->
+    <!-- RSA 실습 시뮬레이터 -->
     <div class="card">
-      <p style="font-size:14px;font-weight:700;margin-bottom:14px;">⚡ claude.ai vs microsoft.com 공개키 비교</p>
-      <table class="ctable">
-        <thead><tr><th>항목</th><th>claude.ai</th><th>microsoft.com</th></tr></thead>
-        <tbody>
-          <tr><td>알고리즘</td><td style="color:var(--accent3);">ECC (타원 곡선)</td><td style="color:var(--accent);">RSA</td></tr>
-          <tr><td>키 비트 수</td><td style="color:var(--accent3);">256비트</td><td style="color:var(--accent);">2048비트</td></tr>
-          <tr><td>실제 보안 강도</td><td style="color:var(--accent3);">≈ RSA 3072비트</td><td style="color:var(--accent);">≈ ECC 224비트</td></tr>
-          <tr><td>속도</td><td style="color:var(--accent3);">⚡ 빠름</td><td style="color:var(--accent);">🐢 느림</td></tr>
-          <tr><td>첫 바이트</td><td style="color:var(--accent3);font-family:monospace;">00 04...</td><td style="color:var(--accent);font-family:monospace;">00 30...</td></tr>
-          <tr><td>인증서 해시 알고리즘</td><td style="color:var(--accent3);">SHA-256</td><td style="color:var(--accent);">SHA-256</td></tr>
-          <tr><td>해시 출력 길이</td><td style="color:var(--accent3);">256비트 (64자리)</td><td style="color:var(--accent);">256비트 (64자리)</td></tr>
-          <tr><td>해시값 위치</td><td colspan="2" style="color:var(--text-dim);font-size:12px;">인증서 세부정보 → <span style="font-family:monospace;color:var(--accent3);">지문(Thumbprint)</span> 항목에서 확인 가능</td></tr>
-        </tbody>
-      </table>
-      <div class="highlight-box green" style="margin-bottom:0;">
-        ✅ 비트 수만 보면 256 &lt; 2048이지만, ECC는 타원 곡선이라는 더 복잡한 수학을 써서 <strong>실제 보안 강도는 claude.ai가 더 강합니다.</strong>
+      <p style="font-size:15px;font-weight:700;margin-bottom:4px;">🧪 RSA 키 생성 &amp; 암복호화 시뮬레이터</p>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">소수 p, q를 입력하면 키를 생성하고, 직접 암호화·복호화를 체험할 수 있습니다.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">소수 p</label>
+          <input id="rsa-p" type="number" class="sim-inp" value="61" min="2">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">소수 q</label>
+          <input id="rsa-q" type="number" class="sim-inp" value="53" min="2">
+        </div>
+      </div>
+      <button onclick="rsaGenKeys()" class="sim-btn">🔑 키 생성하기</button>
+
+      <div id="rsa-key-summary" style="font-size:13px;line-height:1.9;margin-bottom:14px;"></div>
+
+      <div id="rsa-key-out" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;text-align:center;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;font-family:'Space Mono',monospace;">n</div>
+            <div id="rsa-n" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);"></div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;font-family:'Space Mono',monospace;">φ(n)</div>
+            <div id="rsa-phi" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);"></div>
+          </div>
+          <div style="background:rgba(247,193,79,0.08);border:1px solid rgba(247,193,79,0.3);border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--accent2);margin-bottom:4px;font-family:'Space Mono',monospace;">공개키 e</div>
+            <div id="rsa-e" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent2);"></div>
+          </div>
+          <div style="background:rgba(247,79,142,0.08);border:1px solid rgba(247,79,142,0.3);border-radius:8px;padding:12px;">
+            <div style="font-size:10px;color:var(--accent4);margin-bottom:4px;font-family:'Space Mono',monospace;">개인키 d</div>
+            <div id="rsa-d" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--accent4);"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">평문 m (0 &lt; m &lt; n)</label>
+          <input id="rsa-m" type="number" class="sim-inp" value="42" min="1">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <button onclick="rsaEncrypt()" style="padding:10px;background:rgba(247,193,79,0.2);border:1px solid rgba(247,193,79,0.5);border-radius:8px;color:var(--accent2);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🔒 공개키로 암호화</button>
+          <button onclick="rsaDecrypt()" style="padding:10px;background:rgba(247,79,142,0.2);border:1px solid rgba(247,79,142,0.5);border-radius:8px;color:var(--accent4);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">🔓 개인키로 복호화</button>
+        </div>
+        <div id="rsa-crypto-out"></div>
       </div>
     </div>
   </div>
@@ -1040,10 +896,141 @@
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 08 : 활동 과제 — 키 탐정 -->
+  <!-- SECTION 05-C : RSA 키 생성 수학 원리 — 활동 과제 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 08</div>
+    <div class="section-label">SECTION 05-C</div>
+    <div class="section-title">🔢 RSA 키 생성 수학 원리 — 활동 과제</div>
+
+    <!-- 활동 1 -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span style="background:rgba(79,142,247,0.15);border:1px solid rgba(79,142,247,0.4);color:var(--accent);font-family:'Space Mono',monospace;font-size:11px;padding:4px 12px;border-radius:20px;font-weight:700;">문제 1</span>
+        <span style="font-size:14px;font-weight:700;">p = 3, q = 7일 때 키를 구하시오.</span>
+      </div>
+
+      <div class="highlight-box" style="margin-bottom:16px;">
+        <p style="font-size:13px;line-height:1.9;margin:0;">
+          p = 3, q = 7일 때, <strong>n과 φ(n)을 구하고</strong>, 1 &lt; e &lt; φ(n)을 만족하는 공개키 e의 값을 모두 구한 뒤,
+          그 중 가장 작은 값을 공개키 e로 선택하여, 개인키 d를 구하시오.
+        </p>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:8px;margin-bottom:0;">(단, 0 &lt; d &lt; φ(n))</p>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px;">
+        <p style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px;font-family:'Space Mono',monospace;letter-spacing:1px;">STEP-BY-STEP 풀이</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:14px;">
+            <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:6px;">STEP 01 — n 계산</div>
+            <div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--text);">n = p × q = 3 × 7 = <strong style="color:var(--accent2);">21</strong></div>
+          </div>
+          <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:14px;">
+            <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:6px;">STEP 02 — φ(n) 계산</div>
+            <div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--text);">φ(n) = (p−1)(q−1) = 2 × 6 = <strong style="color:var(--accent2);">12</strong></div>
+          </div>
+          <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:14px;">
+            <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:6px;">STEP 03 — 가능한 공개키 e 탐색</div>
+            <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">조건: 1 &lt; e &lt; 12 이며, gcd(e, 12) = 1 인 모든 정수 e</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+              <span style="background:rgba(79,247,168,0.12);border:1px solid rgba(79,247,168,0.3);color:var(--accent3);font-family:'Space Mono',monospace;font-size:13px;padding:4px 14px;border-radius:6px;font-weight:700;">e = 5</span>
+              <span style="background:rgba(79,247,168,0.12);border:1px solid rgba(79,247,168,0.3);color:var(--accent3);font-family:'Space Mono',monospace;font-size:13px;padding:4px 14px;border-radius:6px;font-weight:700;">e = 7</span>
+              <span style="background:rgba(79,247,168,0.12);border:1px solid rgba(79,247,168,0.3);color:var(--accent3);font-family:'Space Mono',monospace;font-size:13px;padding:4px 14px;border-radius:6px;font-weight:700;">e = 11</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);">→ 가장 작은 값: <strong style="color:var(--accent2);">e = 5</strong></div>
+          </div>
+          <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:14px;">
+            <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:6px;">STEP 04 — 개인키 d 계산</div>
+            <div style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);line-height:1.9;">
+              ed ≡ 1 (mod φ(n))<br>
+              5d ≡ 1 (mod 12)<br>
+              <span style="font-size:12px;color:var(--text-dim);">0 &lt; d &lt; 12에서 탐색: 5 × 5 = 25 = 2×12 + 1 → 25 mod 12 = 1 ✅</span>
+            </div>
+            <div style="font-size:13px;color:var(--text);margin-top:8px;font-family:'Space Mono',monospace;">→ <strong style="color:var(--accent4);">d = 5</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="show-btn" onclick="toggleAnswer('ans-rsa1')">🔍 정답 보기</button>
+      <div class="answer-box" id="ans-rsa1" style="margin-top:10px;">
+        ✅ <strong>정답</strong><br><br>
+        n = <strong>21</strong> &nbsp;/&nbsp; φ(n) = <strong>12</strong><br>
+        가능한 e값: <strong>5, 7, 11</strong><br>
+        공개키: <strong>e = 5</strong> &nbsp;/&nbsp; 개인키: <strong>d = 5</strong>
+      </div>
+    </div>
+
+    <!-- 활동 2 -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span style="background:rgba(247,193,79,0.15);border:1px solid rgba(247,193,79,0.4);color:var(--accent2);font-family:'Space Mono',monospace;font-size:11px;padding:4px 12px;border-radius:20px;font-weight:700;">문제 2</span>
+        <span style="font-size:14px;font-weight:700;">RSA 암호화 &amp; 복호화 실습</span>
+      </div>
+
+      <div class="highlight-box yellow" style="margin-bottom:16px;">
+        <p style="font-size:13px;line-height:1.9;margin:0;">다음 RSA 공개키와 개인키가 주어졌을 때 물음에 답하시오.</p>
+        <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">
+          <div style="background:rgba(247,193,79,0.08);border:1px solid rgba(247,193,79,0.3);border-radius:8px;padding:10px 16px;">
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">공개키</div>
+            <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--accent2);">(e, n) = (3, 33)</div>
+          </div>
+          <div style="background:rgba(247,79,142,0.08);border:1px solid rgba(247,79,142,0.3);border-radius:8px;padding:10px 16px;">
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">개인키</div>
+            <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--accent4);">d = 7</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 문제 2-1 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px;">
+        <p style="font-size:13px;font-weight:700;margin-bottom:10px;">
+          <span style="color:var(--accent);font-family:'Space Mono',monospace;font-size:11px;margin-right:8px;">문제 1)</span>
+          평문 m = 2를 암호화하여 암호문 c를 구하는 과정을 서술하시오.
+        </p>
+        <div style="background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.2);border-radius:8px;padding:14px;margin-bottom:10px;">
+          <div style="font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:8px;">풀이</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--text);line-height:2;">
+            c = m<sup>e</sup> mod n<br>
+            c = 2<sup>3</sup> mod 33<br>
+            c = 8 mod 33<br>
+            c = <strong style="color:var(--accent2);">8</strong>
+          </div>
+        </div>
+        <button class="show-btn" onclick="toggleAnswer('ans-rsa2-1')">🔍 정답 보기</button>
+        <div class="answer-box" id="ans-rsa2-1" style="margin-top:8px;">✅ <strong>정답: c = 8</strong></div>
+      </div>
+
+      <!-- 문제 2-2 -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;">
+        <p style="font-size:13px;font-weight:700;margin-bottom:10px;">
+          <span style="color:var(--accent);font-family:'Space Mono',monospace;font-size:11px;margin-right:8px;">문제 2)</span>
+          1)에서 만들어진 암호문을 복호화하시오.
+        </p>
+        <div style="background:rgba(247,79,142,0.06);border:1px solid rgba(247,79,142,0.2);border-radius:8px;padding:14px;margin-bottom:10px;">
+          <div style="font-size:11px;color:var(--accent4);font-family:'Space Mono',monospace;margin-bottom:8px;">풀이</div>
+          <div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--text);line-height:2;">
+            m = c<sup>d</sup> mod n<br>
+            m = 8<sup>7</sup> mod 33<br>
+            m = 2097152 mod 33<br>
+            m = <strong style="color:var(--accent4);">2</strong>
+          </div>
+          <div style="font-size:12px;color:var(--accent3);margin-top:10px;">✅ 복호화 결과가 원래 평문(m = 2)과 일치합니다.</div>
+        </div>
+        <button class="show-btn" onclick="toggleAnswer('ans-rsa2-2')">🔍 정답 보기</button>
+        <div class="answer-box" id="ans-rsa2-2" style="margin-top:8px;">
+          ✅ <strong>정답: m = 2</strong><br><br>
+          8<sup>7</sup> = 2,097,152 이며, 2,097,152 mod 33 = 2
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ────────────────────────────────────────────────── -->
+  <!-- SECTION 07 : 활동 과제 — 키 탐정 -->
+  <!-- ────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-label">SECTION 06</div>
     <div class="section-title">🕵️ 활동 과제</div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -1096,112 +1083,6 @@
       </div>
     </div>
 
-    <!-- 심화 미션 -->
-    <div class="card">
-      <p style="font-size:14px;font-weight:700;margin-bottom:14px;">🧠 심화 분석 미션</p>
-      <div class="act-box">
-        <div class="act-title">미션 1 — 바이트 계산기 🔢</div>
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">microsoft.com 공개키의 바이트 수를 세고 비트 수를 계산하세요.</div>
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">바이트 수: <span class="blank"></span> 개 × 8 = <span class="blank"></span> 비트</div>
-        <button class="show-btn" onclick="toggleAnswer('ans-m1')">🔍 정답 보기</button>
-        <div class="answer-box" id="ans-m1">
-          ✅ RSA 2048비트 공개키 기준<br><br>
-          256바이트 × 8 = <strong>2048비트</strong><br>
-          hex 값에서 두 자리씩 묶인 것 하나가 1바이트이므로,
-          hex 값을 나열했을 때 쌍의 수를 세면 됩니다.
-        </div>
-      </div>
-      <div class="act-box">
-        <div class="act-title">미션 2 — 보안 강도 판정 ⚖️</div>
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">ECC 256비트가 RSA 2048비트보다 강한 이유는?</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim);cursor:pointer;"><input type="radio" name="m2" style="accent-color:var(--accent);"> ECC는 마케팅용 숫자라 실제로는 RSA가 더 강하다</label>
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim);cursor:pointer;"><input type="radio" name="m2" style="accent-color:var(--accent);"> ECC는 타원 곡선이라는 더 복잡한 수학을 써서 작은 키로도 강한 보안을 낸다</label>
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-dim);cursor:pointer;"><input type="radio" name="m2" style="accent-color:var(--accent);"> 비트 수가 적을수록 해독하기 어렵다</label>
-        </div>
-        <button class="show-btn" onclick="toggleAnswer('ans-m2')">🔍 정답 보기</button>
-        <div class="answer-box" id="ans-m2">
-          ✅ 정답: <strong>두 번째</strong><br><br>
-          RSA는 "거대한 수의 소인수분해"가 어렵다는 원리를 이용합니다.<br>
-          ECC는 "타원 곡선 위의 이산 로그 문제"라는 훨씬 복잡한 수학을 이용해,
-          같은 보안 강도를 훨씬 짧은 키로 달성합니다.<br><br>
-          NIST 기준: ECC 256비트 ≈ RSA <strong>3072비트</strong> 보안 강도<br>
-          → claude.ai(ECC 256)가 microsoft.com(RSA 2048)보다 더 강합니다.
-        </div>
-      </div>
-      <div class="act-box" style="margin-bottom:0;">
-        <div class="act-title">미션 3 — 나라면? 🤔</div>
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">새 서비스를 만든다면 RSA와 ECC 중 어떤 방식을 선택할지, 이유와 함께 적어보세요.</div>
-        <div class="write-area">내 선택과 이유...</div>
-        <button class="show-btn" onclick="toggleAnswer('ans-m3')" style="margin-top:10px;">🔍 예시 답안 보기</button>
-        <div class="answer-box" id="ans-m3">
-          💡 예시 답안<br><br>
-          <strong>ECC를 선택합니다.</strong><br><br>
-          이유: ECC는 RSA보다 작은 키로 동등하거나 더 높은 보안 강도를 제공합니다.
-          키가 작으면 연산이 빠르고 네트워크 트래픽도 줄어들어 모바일 환경에서도 유리합니다.
-          현재 TLS 1.3 표준도 ECC 기반의 ECDHE 키 교환을 권장합니다.<br><br>
-          단, 오래된 시스템과의 호환성이 중요하다면 RSA도 여전히 유효한 선택입니다.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 09 : 확인 퀴즈 -->
-  <!-- ────────────────────────────────────────────────── -->
-  <div class="section">
-    <div class="section-label">SECTION 09</div>
-    <div class="section-title">📝 확인 퀴즈</div>
-
-    <div class="quiz-item">
-      <div class="quiz-q">Q1. 해시 함수의 특징으로 올바르지 않은 것은?</div>
-      <ul class="quiz-options">
-        <li><span>A</span> 같은 입력은 언제나 같은 해시값을 출력한다</li>
-        <li><span>B</span> 해시값으로 원본 데이터를 복원할 수 있다</li>
-        <li><span>C</span> 글자 하나(1바이트 이상)만 달라도 출력이 완전히 달라진다</li>
-        <li><span>D</span> 입력 길이에 무관하게 출력 길이가 고정된다</li>
-      </ul>
-      <button class="show-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">정답 확인</button>
-      <div class="answer-box">✅ 정답: <strong>B</strong> — 해시는 단방향(불가역)이라 해시값으로 원본을 복원하는 것은 현실적으로 불가능합니다.</div>
-    </div>
-
-    <div class="quiz-item">
-      <div class="quiz-q">Q2. 비대칭 암호화에서 공개키로 암호화한 데이터를 복호화할 수 있는 것은?</div>
-      <ul class="quiz-options">
-        <li><span>A</span> 다시 공개키로 복호화한다</li>
-        <li><span>B</span> 개인키로만 복호화할 수 있다</li>
-        <li><span>C</span> 세션키로 복호화한다</li>
-        <li><span>D</span> SHA-256으로 복호화한다</li>
-      </ul>
-      <button class="show-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">정답 확인</button>
-      <div class="answer-box">✅ 정답: <strong>B</strong> — 공개키로 잠근 것은 반드시 대응하는 개인키로만 열 수 있습니다.</div>
-    </div>
-
-    <div class="quiz-item">
-      <div class="quiz-q">Q3. HTTPS에서 비대칭 암호화를 사용하는 주된 이유는?</div>
-      <ul class="quiz-options">
-        <li><span>A</span> 모든 데이터를 빠르게 암호화하기 위해</li>
-        <li><span>B</span> 안전하게 세션키(대칭키)를 교환하기 위해</li>
-        <li><span>C</span> 서버 속도를 높이기 위해</li>
-        <li><span>D</span> 비밀번호를 해시로 변환하기 위해</li>
-      </ul>
-      <button class="show-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">정답 확인</button>
-      <div class="answer-box">✅ 정답: <strong>B</strong> — 비대칭은 느리므로 세션키 교환에만 쓰고, 이후 실제 데이터 전송은 빠른 대칭 암호화(AES)로 전환합니다.</div>
-    </div>
-
-    <div class="quiz-item">
-      <div class="quiz-q">Q4. 코로나 백신 증명서 QR에서 위조를 탐지하는 핵심 원리는?</div>
-      <ul class="quiz-options">
-        <li><span>A</span> 데이터를 바꾸면 해시값이 달라져 원본 서명과 일치하지 않는다</li>
-        <li><span>B</span> QR 코드 자체에 위조 방지 잉크가 사용된다</li>
-        <li><span>C</span> 인터넷으로 실시간 정부 DB와 대조한다</li>
-        <li><span>D</span> 개인키가 QR 안에 포함되어 있다</li>
-      </ul>
-      <button class="show-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">정답 확인</button>
-      <div class="answer-box">✅ 정답: <strong>A</strong> — 데이터 변조 시 해시B ≠ 해시A가 되어 즉시 탐지됩니다. 공개키만 있으면 인터넷 없이도 오프라인 검증 가능합니다.</div>
-    </div>
   </div>
 
   <!-- 요약 -->
@@ -1214,7 +1095,6 @@
     </p>
     <div style="margin-top:20px;">
       <span class="tag">SHA-256</span>
-      <span class="tag">bcrypt</span>
       <span class="tag">RSA</span>
       <span class="tag">ECC</span>
       <span class="tag">HTTPS/TLS</span>
