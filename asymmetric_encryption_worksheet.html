@@ -353,6 +353,10 @@
     <div class="section-label">SECTION 04</div>
     <div class="section-title">🧪 코로나 백신 증명서 QR 인증 시뮬레이터</div>
 
+    <div class="highlight-box yellow" style="margin-bottom:20px;">
+      ⚠️ <strong>왜 전자서명은 반드시 해시를 거치는가?</strong> RSA 등 비대칭 알고리즘은 키 길이보다 큰 데이터를 직접 처리할 수 없고, 원문에 직접 서명하면 성능이 매우 느리며 보안 취약점도 발생합니다. 이 때문에 RSA-PSS, ECDSA 등 현재 사용되는 모든 <strong>전자서명 표준은 해시를 필수 단계로 포함</strong>하고 있습니다.
+    </div>
+
     <div class="card" style="margin-bottom:20px;padding:20px;">
       <p style="font-size:13px;color:var(--text-dim);">
         코로나 백신 증명서 QR 인증 과정을 직접 체험합니다. <strong>정부 역할</strong>로 QR을 발급하고,
@@ -406,10 +410,10 @@
           검사원이 눈으로 직접 확인하는 단계입니다.</div>
         </div>
         <div class="flow-step" data-step="3">
-          <div class="flow-step-title">공개키로 서명 복호화 → 해시A 추출</div>
+          <div class="flow-step-title">공개키로 서명 되돌림 → 해시A 추출</div>
           <div class="flow-step-body">검사원 앱에 미리 설치된 <strong>질병관리청 공개키</strong>로 전자서명을 복호화합니다.
           인터넷 없이도 오프라인 검증이 가능합니다.<br>
-          <span class="ci">해시A = 공개키(전자서명)</span></div>
+          <span class="ci">해시A = 공개키로 되돌린 값 (서명에서 추출)</span></div>
         </div>
         <div class="flow-step" data-step="4">
           <div class="flow-step-title">원본 데이터 직접 해시 → 해시B 계산</div>
@@ -575,12 +579,12 @@
         <div class="mini-card">
           <span class="icon">⚡</span>
           <h4>대칭 암호화</h4>
-          <p>같은 키로 잠그고 엶.<br>빠르지만 키 전달이 위험.<br>AES, DES 등</p>
+          <p>같은 키로 잠그고 엶.<br>빠르지만 키 사전 공유 필요.<br>AES, DES 등</p>
         </div>
         <div class="mini-card">
           <span class="icon">🔑🗝️</span>
           <h4>비대칭 암호화</h4>
-          <p>다른 키로 잠그고 엶.<br>느리지만 키 전달 안전.<br>RSA, ECC 등</p>
+          <p>다른 키로 잠그고 엶.<br>느리지만 공개키만으로 배포 가능.<br>RSA, ECC 등</p>
         </div>
       </div>
       <div class="highlight-box yellow" style="margin-bottom:0;">
@@ -656,6 +660,9 @@
         </div>
       </div>
 
+      <div class="highlight-box pink" style="margin-bottom:14px;">
+        ⚠️ <strong>비대칭 암호화가 느린 이유:</strong> RSA의 암호화(m<sup>e</sup> mod n)·복호화(c<sup>d</sup> mod n) 연산에서 e, d, n이 실제로 2048비트 이상의 매우 큰 수이기 때문입니다. 이 <strong>큰 수의 모듈러 거듭제곱 연산</strong> 자체가 연산량이 많아 느립니다. 반면 대칭 암호화(AES)는 비트 치환·교환의 단순 반복 연산이라 하드웨어 가속도 잘 되어 훨씬 빠릅니다.
+      </div>
       <div class="highlight-box green" style="margin-bottom:0;">
         ⚠️ <strong>시드값 보안:</strong> 시드값이 탈취되면 공격자는 동일한 OTP를 생성할 수 있으므로 매우 위험합니다. 시드값은 최초 등록 시에만 전달되며 이후 네트워크로 전송되지 않습니다.
       </div>
@@ -711,15 +718,12 @@
   </div>
 
   <div class="divider"></div>
+  <div class="divider"></div>
 
-  <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 05-B : 비대칭 암호화 개념 & RSA -->
-  <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 05-B</div>
-    <div class="section-title">🔑 비대칭 암호화(RSA) 개념 &amp; 원리</div>
+    <div class="section-label">SECTION 06-A</div>
+    <div class="section-title">🔑 비대칭 암호화란?</div>
 
-    <!-- 개념 카드 -->
     <div class="card" style="margin-bottom:20px;">
       <p style="font-size:15px;font-weight:700;margin-bottom:14px;">비대칭 암호화란?</p>
       <p style="font-size:14px;line-height:1.9;margin-bottom:18px;">
@@ -748,7 +752,6 @@
       </div>
     </div>
 
-    <!-- 암호화 vs 서명 흐름 -->
     <div class="card" style="margin-bottom:20px;">
       <p style="font-size:15px;font-weight:700;margin-bottom:16px;">📡 두 가지 사용 방식</p>
       <div class="two-col">
@@ -772,8 +775,13 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="divider"></div>
 
-    <!-- RSA 키 생성 수학 원리 -->
+  <div class="section">
+    <div class="section-label">SECTION 06-B</div>
+    <div class="section-title">🔢 RSA 수학 원리 &amp; 시뮬레이터</div>
+
     <div class="card" style="margin-bottom:20px;">
       <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔢 RSA 키 생성 수학 원리</p>
       <div class="flow-steps">
@@ -781,7 +789,8 @@
           <div class="flow-step-title">두 소수 p, q 선택</div>
           <div class="flow-step-body">
             서로 다른 큰 소수 두 개를 고릅니다.<br>
-            <span class="ci">예) p = 61, q = 53</span>
+            <span class="ci">예) p = 61, q = 53</span><br>
+            <span style="font-size:12px;color:var(--text-dim);">실제 RSA에서는 2048비트 이상의 큰 소수를 사용합니다. 큰 소수는 단순 나눗셈 대신 <strong>밀러-라빈(Miller-Rabin) 확률적 판별법</strong>으로 빠르게 생성합니다. 40라운드 반복 시 오판 확률 ≈ 4<sup>-40</sup> (사실상 0).</span>
           </div>
         </div>
         <div class="flow-step" data-step="2">
@@ -841,7 +850,6 @@
       </div>
     </div>
 
-    <!-- RSA 실습 시뮬레이터 -->
     <div class="card">
       <p style="font-size:15px;font-weight:700;margin-bottom:4px;">🧪 RSA 키 생성 &amp; 암복호화 시뮬레이터</p>
       <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px;">소수 p, q를 입력하면 키를 생성하고, 직접 암호화·복호화를 체험할 수 있습니다.</p>
@@ -892,14 +900,13 @@
       </div>
     </div>
   </div>
-
   <div class="divider"></div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 05-C : RSA 키 생성 수학 원리 — 활동 과제 -->
+  <!-- SECTION 06-C : RSA 키 생성 수학 원리 — 활동 과제 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 05-C</div>
+    <div class="section-label">SECTION 06-C</div>
     <div class="section-title">🔢 RSA 키 생성 수학 원리 — 활동 과제</div>
 
     <!-- 활동 1 -->
@@ -1025,12 +1032,121 @@
   </div>
 
   <div class="divider"></div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">SECTION 06-D</div>
+    <div class="section-title">🔄 비대칭 암호화·복호화 과정</div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🔄 비대칭 암호화·복호화 과정</p>
+      <table class="ctable">
+        <thead>
+          <tr><th>구분</th><th>암호화</th><th>복호화</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>사용 키</td><td>수신자의 공개키</td><td>수신자의 개인키</td></tr>
+          <tr><td>수행 주체</td><td>송신자</td><td>수신자</td></tr>
+          <tr><td>과정</td><td>원문 → 수신자 공개키 적용 → 암호문 생성</td><td>암호문 → 수신자 개인키 적용 → 원문 복원</td></tr>
+          <tr><td>보안 목적</td><td>기밀성 — 수신자만 복호화 가능</td><td>수신자 본인만 개인키 보유 → 복호화 독점</td></tr>
+          <tr><td>대표 사례</td><td>HTTPS 세션키 전달, 이메일 암호화(PGP), 공동인증서 발급</td><td>HTTPS 세션키 복호화, 이메일 복호화(PGP), 공동인증서 서명 검증</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">SECTION 06-E</div>
+    <div class="section-title">🌐 비대칭 암호화 적용 사례</div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">🌐 비대칭 암호화 주요 적용 사례</p>
+      <table class="ctable">
+        <thead><tr><th>사례</th><th>암호화</th><th>복호화/검증</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr><td>HTTPS</td><td>서버 공개키로 세션키 암호화</td><td>서버 개인키로 복호화</td><td>키 교환</td></tr>
+          <tr><td>공동인증서</td><td>개인키로 서명</td><td>공개키로 서명 검증</td><td>본인 인증</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">💡 공동인증서의 키 생성 과정</p>
+      <div class="flow-steps">
+        <div class="flow-step" data-step="1">
+          <div class="flow-step-title">키 쌍 생성</div>
+          <div class="flow-step-body">은행 앱·보안 프로그램이 사용자 기기에서 공개키·개인키 쌍을 생성합니다. 키 생성은 기기 안에서만 이루어집니다.</div>
+        </div>
+        <div class="flow-step" data-step="2">
+          <div class="flow-step-title">공개키 전송 (개인키는 기기 밖으로 나가지 않음)</div>
+          <div class="flow-step-body">공개키 + 본인 정보를 인증기관(CA)에 전송합니다. 개인키는 절대 기기 밖으로 나가지 않으며 CA도 알 수 없습니다.</div>
+        </div>
+        <div class="flow-step" data-step="3">
+          <div class="flow-step-title">인증서 발급 — CA가 공개키에 도장을 찍는 것</div>
+          <div class="flow-step-body">CA가 본인 확인 후 공개키에 CA의 개인키로 서명 → 인증서 발급. "이 공개키는 이 사람 것이 맞다"는 CA의 보증입니다.</div>
+        </div>
+        <div class="flow-step" data-step="4">
+          <div class="flow-step-title">개인키 기기 저장</div>
+          <div class="flow-step-body">개인키는 사용자 기기(앱·보안 프로그램·USB)에 저장됩니다. 예전 공인인증서의 NPKI 폴더에 저장되던 파일이 바로 개인키 파일이었습니다.</div>
+        </div>
+        <div class="flow-step" data-step="5">
+          <div class="flow-step-title">로그인·거래 시 서명 & 검증</div>
+          <div class="flow-step-body">사용자가 개인키로 서명 + 인증서(공개키)를 은행 서버로 전송 → 은행이 CA에 인증서 유효성 확인 후 공개키로 서명 검증합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">SECTION 06-F</div>
+    <div class="section-title">🌐 HTTPS 키교환 과정 예시</div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:14px;color:var(--text-dim);line-height:1.9;margin-bottom:18px;">
+        HTTPS는 비대칭 암호화(느리지만 안전)와 대칭 암호화(빠름)를 조합합니다.
+        비대칭으로 <strong>세션키를 안전하게 교환</strong>한 뒤, 실제 데이터는 <strong>빠른 대칭(AES)으로 암호화</strong>합니다.
+      </p>
+      <div class="flow-steps">
+        <div class="flow-step" data-step="1">
+          <div class="flow-step-title">서버가 공개키 전달</div>
+          <div class="flow-step-body">브라우저가 접속하면 서버가 자신의 <strong>공개키(인증서 형태)</strong>를 전송합니다.<br>
+          <span class="ci">[서버] → 공개키(인증서) → [브라우저]</span></div>
+        </div>
+        <div class="flow-step" data-step="2">
+          <div class="flow-step-title">브라우저가 세션키 생성</div>
+          <div class="flow-step-body">브라우저가 이번 연결에서만 쓸 <strong>임시 대칭키(세션키)</strong>를 랜덤 생성합니다.<br>
+          <span class="ci">세션키 = random AES key (128~256비트)</span></div>
+        </div>
+        <div class="flow-step" data-step="3">
+          <div class="flow-step-title">세션키를 서버 공개키로 암호화해서 전송</div>
+          <div class="flow-step-body">브라우저가 세션키를 <strong>서버의 공개키로 암호화</strong>해 전송합니다. 공개키로 잠갔으니 서버 개인키로만 열 수 있습니다.<br>
+          <span class="ci">[브라우저] → 암호화된 세션키 → [서버]</span></div>
+        </div>
+        <div class="flow-step" data-step="4">
+          <div class="flow-step-title">서버가 개인키로 세션키 복호화</div>
+          <div class="flow-step-body">서버만 가진 <strong>개인키로 복호화</strong>해 세션키를 꺼냅니다. 이제 양쪽 모두 같은 세션키를 보유합니다.<br>
+          <span class="ci">서버 개인키(세션키 암호문) → 세션키 복원</span></div>
+        </div>
+        <div class="flow-step" data-step="5">
+          <div class="flow-step-title">이후 통신은 세션키(대칭 AES)로 암호화</div>
+          <div class="flow-step-body">느린 비대칭은 <strong>세션키 교환 1회만</strong> 사용하고, 이후 모든 데이터는 <strong>빠른 AES 대칭 암호화</strong>로 주고받습니다.<br>
+          <span class="ci">[브라우저] ⇄ AES(세션키) ⇄ [서버]</span></div>
+        </div>
+      </div>
+      <div class="highlight-box green" style="margin-top:16px;margin-bottom:0;">
+        💡 <strong>핵심:</strong> 비대칭은 "느리지만 사전 공유 없이 안전하게 키 전달"이 가능합니다.
+        대칭은 "빠르지만 키를 미리 공유해야" 합니다. HTTPS는 비대칭으로 대칭키를 교환해 두 장점을 모두 취합니다.
+      </div>
+    </div>
+  </div>
 
   <!-- ────────────────────────────────────────────────── -->
-  <!-- SECTION 07 : 활동 과제 — 키 탐정 -->
+  <!-- SECTION 06-G : 활동 과제 — 키 탐정 -->
   <!-- ────────────────────────────────────────────────── -->
   <div class="section">
-    <div class="section-label">SECTION 06</div>
+    <div class="section-label">SECTION 06-G</div>
     <div class="section-title">🕵️ 활동 과제</div>
 
     <div class="card" style="margin-bottom:20px;">
@@ -1088,6 +1204,85 @@
 
 
 </div>
+
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-label">SECTION 06-H</div>
+    <div class="section-title">✍️ 전자서명</div>
+
+        <!-- 서명 정의 -->
+    <div class="highlight-box" style="margin-bottom:20px;">
+      <strong>서명이란?</strong> 암호화된 것을 푸는 복호화와 달리, 서명은 해시값에 개인키를 적용해 <strong>"나만 만들 수 있는 값"</strong>을 새로 생성하는 행위입니다. 수식은 복호화와 동일(c<sup>d</sup> mod n)하지만, 입력이 암호문이 아닌 해시값이고 목적이 기밀성이 아닌 <strong>인증·무결성 증명</strong>이라는 점에서 구분됩니다.
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <p style="font-size:15px;font-weight:700;margin-bottom:16px;">✍️ 전자서명 과정</p>
+      <div class="two-col" style="margin-bottom:20px;">
+        <div class="mini-card" style="text-align:left;padding:18px;">
+          <span class="icon" style="font-size:22px;">🖊️</span>
+          <h4>서명 생성 (송신자)</h4>
+          <p style="line-height:1.9;">
+            서명 대상 데이터 → SHA-256 → 해시값<br>
+            → <strong style="color:var(--accent4);">개인키</strong>로 서명<br>
+            <span style="font-size:11px;color:var(--text-dim);">개인키 보유자(송신자)가 수행</span>
+          </p>
+        </div>
+        <div class="mini-card" style="text-align:left;padding:18px;">
+          <span class="icon" style="font-size:22px;">🔍</span>
+          <h4>서명 검증 (수신자)</h4>
+          <p style="line-height:1.9;">
+            서명 → <strong style="color:var(--accent2);">공개키</strong>로 되돌림 → 해시A<br>
+            수신한 데이터 → SHA-256 → 해시B<br>
+            해시A == 해시B? → ✅ 유효
+          </p>
+        </div>
+      </div>
+      <div class="highlight-box yellow" style="margin-bottom:16px;">
+        ⚠️ <strong>왜 반드시 해시를 거치는가?</strong> RSA 등 비대칭 알고리즘은 키 길이보다 큰 데이터를 직접 처리할 수 없고, 원문에 직접 서명하면 성능이 매우 느리며 보안 취약점도 발생합니다. RSA-PSS, ECDSA 등 모든 전자서명 표준은 해시를 필수 단계로 포함합니다.
+      </div>
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">📋 전자서명 단계별 흐름</p>
+      <table class="ctable">
+        <thead><tr><th>단계</th><th>과정</th><th>수행 주체</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>서명 생성</td>
+            <td>서명 대상 데이터(예: 거래 내용, 로그인 요청) → SHA-256 → 해시값 → 개인키로 서명</td>
+            <td>개인키 보유자(송신자)</td>
+          </tr>
+          <tr>
+            <td>서명 검증</td>
+            <td>서명 → 공개키로 되돌림 → 해시A, 수신한 서명 대상 데이터 → SHA-256 → 해시B, 해시A == 해시B?</td>
+            <td>공개키 보유자(수신자)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <p style="font-size:15px;font-weight:700;margin-bottom:14px;">🏦 공동인증서 전자서명 흐름</p>
+      <div class="flow-steps">
+        <div class="flow-step" data-step="1">
+          <div class="flow-step-title">사용자가 거래 내용에 개인키로 서명</div>
+          <div class="flow-step-body">은행 앱이 "100만원 이체" 같은 거래 데이터를 SHA-256으로 해시한 뒤, 사용자 기기에 저장된 개인키로 서명값을 생성합니다.</div>
+        </div>
+        <div class="flow-step" data-step="2">
+          <div class="flow-step-title">서명값 + 인증서(공개키) 전송</div>
+          <div class="flow-step-body">서명값과 함께 사용자의 인증서(공개키 포함)를 은행 서버로 전송합니다. 공개키는 이 단계에서 은행에 전달됩니다.</div>
+        </div>
+        <div class="flow-step" data-step="3">
+          <div class="flow-step-title">은행이 CA에 인증서 유효성 확인</div>
+          <div class="flow-step-body">은행 서버가 CA(인증기관)에 조회해 "이 인증서가 실제로 CA가 발급한 것인지" 확인합니다.</div>
+        </div>
+        <div class="flow-step" data-step="4">
+          <div class="flow-step-title">공개키로 서명 검증</div>
+          <div class="flow-step-body">인증서의 공개키로 서명값을 되돌려 해시A를 추출하고, 수신한 거래 데이터를 직접 SHA-256해서 해시B를 만들어 비교합니다.<br>
+          <span class="ci">해시A == 해시B → ✅ 본인이 서명한 거래 확인</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
 /* ── OTP 시뮬레이터 ── */
