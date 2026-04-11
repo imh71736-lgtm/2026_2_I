@@ -790,7 +790,7 @@
           <div class="flow-step-body">
             서로 다른 큰 소수 두 개를 고릅니다.<br>
             <span class="ci">예) p = 5, q = 11</span><br>
-            <span style="font-size:12px;color:var(--text-dim);">실제 RSA에서는 2048비트 이상의 큰 소수를 사용합니다. 큰 소수는 단순 나눗셈 대신 <strong>밀러-라빈(Miller-Rabin) 확률적 판별법</strong>으로 빠르게 생성합니다. 40라운드 반복 시 오판 확률 ≈ 4<sup>-40</sup> (사실상 0).</span>
+            <span style="font-size:12px;color:var(--text-dim);">실제 RSA에서는 1024비트 이상의 큰 소수 두 개(p, q)의 곱으로 2048비트 이상의 n을 생성합니다. 큰 소수는 단순 나눗셈 대신 <strong>밀러-라빈(Miller-Rabin) 확률적 판별법</strong>으로 빠르게 생성합니다. 40라운드 반복 시 오판 확률 ≈ 4<sup>-40</sup> (사실상 0).</span>
           </div>
         </div>
         <div class="flow-step" data-step="2">
@@ -801,9 +801,9 @@
           </div>
         </div>
         <div class="flow-step" data-step="3">
-          <div class="flow-step-title">φ(n) = (p−1)(q−1) 계산 (오일러 피 함수)</div>
+          <div class="flow-step-title">φ(n) = (p−1)(q−1) 계산 (오일러 파이 함수)</div>
           <div class="flow-step-body">
-            n보다 작으면서 n과 서로소인 양의 정수의 개수입니다.<br>
+            오일러 파이 함수 : 1 이상 n 이하의 자연수 중 n과 서로소인 것의 개수를 구하는 함수<br>
             <span class="ci">φ(55) = (5-1)(11-1) = 4 × 10 = 40</span>
           </div>
         </div>
