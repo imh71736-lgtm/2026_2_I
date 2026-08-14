@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기계학습 유형 활동지 — 지도학습·비지도학습·강화학습</title>
+<style>
+  :root{
+    --teal:#2F8F7F; --teal-dark:#1F5F54; --teal-light:#EAF4F1;
+    --coral:#E8734A; --coral-dark:#B95531; --coral-light:#FDEFE9;
+    --purple:#6B5CA5; --purple-dark:#4E4179; --purple-light:#F1EEFA;
+    --bg:#FAF7F1; --card:#FFFFFF; --ink:#2B2B2B; --sub:#666666;
+    --line:#E4DFD3; --shadow:0 2px 10px rgba(31,95,84,0.08); --radius:14px;
+    font-family:"맑은 고딕","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.65;}
+  .wrap{max-width:1020px;margin:0 auto;padding:24px 20px 90px;}
+  header.top{background:linear-gradient(120deg,var(--teal-dark),var(--teal));color:#fff;padding:26px 26px;border-radius:var(--radius);box-shadow:var(--shadow);}
+  header.top .tag{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);border-radius:14px;padding:2px 12px;font-size:12px;margin-bottom:8px;}
+  header.top h1{margin:2px 0 6px;font-size:23px;}
+  header.top p{margin:0;opacity:.92;font-size:13.5px;}
+
+  section.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-top:18px;}
+  h2.sec-title{margin:0 0 4px;color:var(--teal-dark);font-size:19px;display:flex;align-items:center;gap:8px;}
+  .sec-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-size:13px;font-weight:bold;}
+  .sec-sub{color:var(--sub);font-size:12.5px;margin:0 0 16px 34px;}
+
+  .type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:820px){ .type-grid{grid-template-columns:1fr;} }
+  .type-card{border-radius:12px;padding:16px;border:1.5px solid var(--line);}
+  .type-card.sup{background:var(--teal-light);border-color:var(--teal);}
+  .type-card.uns{background:var(--coral-light);border-color:var(--coral);}
+  .type-card.rl{background:var(--purple-light);border-color:var(--purple);}
+  .type-card .icon{font-size:26px;}
+  .type-card h3{margin:6px 0 4px;font-size:17px;}
+  .sup h3{color:var(--teal-dark);} .uns h3{color:var(--coral-dark);} .rl h3{color:var(--purple-dark);}
+  .type-card .def{font-size:13px;font-weight:700;margin-bottom:8px;}
+  .type-card ul{margin:0 0 10px;padding-left:18px;font-size:12.5px;color:var(--ink);}
+  .type-card ul li{margin-bottom:3px;}
+  .label{display:block;font-size:11px;font-weight:bold;color:var(--sub);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.3px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:12px;background:#fff;border:1px solid var(--line);color:var(--ink);}
+  .sup .chip{border-color:var(--teal);} .uns .chip{border-color:var(--coral);} .rl .chip{border-color:var(--purple);}
+
+  table.cmp{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;margin-top:4px;}
+  table.cmp th, table.cmp td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top;}
+  table.cmp th{background:var(--teal);color:#fff;font-size:12.5px;}
+  table.cmp th:first-child, table.cmp td:first-child{background:#f7f5ef;font-weight:bold;font-size:12.5px;color:var(--sub);}
+  table.cmp td.sup-col{background:var(--teal-light);} table.cmp td.uns-col{background:var(--coral-light);} table.cmp td.rl-col{background:var(--purple-light);}
+
+  .knn-box{display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .knn-box .txt{flex:1;min-width:220px;font-size:13.5px;}
+  .knn-box svg{background:#fffefb;border:1px solid var(--line);border-radius:10px;}
+  .legend2{display:flex;gap:14px;font-size:12px;margin-top:6px;flex-wrap:wrap;}
+  .legend2 span{display:inline-flex;align-items:center;gap:5px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .tri{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid var(--purple);display:inline-block;}
+
+  .flex2{display:flex;gap:20px;flex-wrap:wrap;}
+  .flex2 > div{flex:1;min-width:260px;}
+  label.field-label{font-size:12.5px;color:var(--sub);font-weight:600;display:block;margin-bottom:4px;}
+  input[type=range]{width:100%;accent-color:var(--teal);}
+  input[type=number]{width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:13px;}
+  .k-display{font-size:20px;font-weight:bold;color:var(--coral);}
+  .predict-box{margin-top:14px;padding:14px;border-radius:10px;background:var(--purple-light);border-left:4px solid var(--purple);font-size:14px;}
+  .predict-box b{color:var(--purple-dark);}
+  svg.plot{width:100%;height:auto;background:#fffefb;border:1px solid var(--line);border-radius:10px;cursor:crosshair;}
+  .stat-row{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;}
+  .stat-box{flex:1;min-width:130px;background:var(--teal-light);border-radius:10px;padding:10px 14px;text-align:center;}
+  .stat-box .n{font-size:20px;font-weight:bold;color:var(--teal-dark);}
+  .stat-box .l{font-size:11.5px;color:var(--sub);}
+
+  .quiz-progress{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+  .score-badge{background:var(--coral);color:#fff;font-weight:bold;font-size:13px;padding:5px 16px;border-radius:16px;}
+  .btn{background:var(--teal);color:#fff;border:none;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;}
+  .btn:hover{background:var(--teal-dark);}
+  .btn.secondary{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal);}
+  .btn.secondary:hover{background:var(--teal-light);}
+
+  .q-card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#fffefb;}
+  .q-card .q-num{display:inline-block;background:var(--teal-dark);color:#fff;font-size:11px;font-weight:bold;border-radius:10px;padding:1px 9px;margin-bottom:6px;}
+  .q-card .q-text{font-size:14px;font-weight:600;margin-bottom:10px;}
+  .opt-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  .opt-btn{border:1.5px solid var(--line);background:#fff;padding:7px 16px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;}
+  .opt-btn[data-t="지도학습"]:hover{border-color:var(--teal);}
+  .opt-btn[data-t="비지도학습"]:hover{border-color:var(--coral);}
+  .opt-btn[data-t="강화학습"]:hover{border-color:var(--purple);}
+  .opt-btn.selected[data-t="지도학습"]{border-color:var(--teal);background:var(--teal-light);}
+  .opt-btn.selected[data-t="비지도학습"]{border-color:var(--coral);background:var(--coral-light);}
+  .opt-btn.selected[data-t="강화학습"]{border-color:var(--purple);background:var(--purple-light);}
+  .feedback{font-size:13px;margin-top:6px;padding:8px 10px;border-radius:6px;display:none;}
+  .feedback.correct{display:block;background:#E7F5EA;color:#217A3B;}
+  .feedback.wrong{display:block;background:#FBE6E6;color:#B23A3A;}
+
+  .note{background:var(--coral-light);border-left:4px solid var(--coral);padding:9px 13px;border-radius:6px;font-size:12.5px;margin-top:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="tag">1-4 · 기계학습 유형과 알고리즘 선정 (교과서 74~75쪽)</span>
+    <h1>🧭 지도학습 · 비지도학습 · 강화학습 활동지</h1>
+    <p>개념과 알고리즘을 정리하고, 문제 상황에 맞는 학습 유형을 직접 구분해 봅시다.</p>
+  </header>
+
+  <!-- 1. 개념 정리 -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">1</span> 개념 정리</h2>
+    <p class="sec-sub">기계학습은 데이터에 레이블(정답)이 있는지, 어떤 방식으로 학습하는지에 따라 세 가지로 구분됩니다.</p>
+
+    <div class="type-grid">
+      <div class="type-card sup">
+        <div class="icon">🎯</div>
+        <h3>지도학습</h3>
+        <div class="def">레이블(정답)이 주어진 데이터로 학습하는 방법</div>
+        <ul>
+          <li>정답을 알고 있는 상태에서 학습함</li>
+          <li><b>분류</b>: 입력을 두 개 이상의 클래스로 나눔</li>
+          <li><b>예측(회귀)</b>: 입력·출력 관계를 학습해 연속된 값을 예상함</li>
+        </ul>
+        <span class="label">대표 알고리즘</span>
+        <div class="chip-row">
+          <span class="chip">k-최근접 이웃(k-NN)</span><span class="chip">선형 회귀</span><span class="chip">로지스틱 회귀</span><span class="chip">의사결정트리</span><span class="chip">SVM</span>
+        </div>
+        <span class="label">활용 예시</span>
+        <div class="chip-row">
+          <span class="chip">스팸 메일 분류</span><span class="chip">손글씨 인식</span><span class="chip">시험 점수 예측</span>
+        </div>
+      </div>
+
+      <div class="type-card uns">
+        <div class="icon">🔍</div>
+        <h3>비지도학습</h3>
+        <div class="def">레이블(정답)이 없는 데이터로 학습하는 방법</div>
+        <ul>
+          <li>데이터 자체에서 패턴을 찾아내야 할 때 사용</li>
+          <li>비슷한 특징끼리 묶는 <b>군집</b> 문제가 대표적</li>
+          <li>정답이 없어 성능을 평가하기 어려움</li>
+        </ul>
+        <span class="label">대표 알고리즘</span>
+        <div class="chip-row"><span class="chip">k-평균(k-means)</span></div>
+        <span class="label">활용 예시</span>
+        <div class="chip-row">
+          <span class="chip">고객 세분화</span><span class="chip">이상거래 탐지</span><span class="chip">뉴스 기사 그룹화</span>
+        </div>
+      </div>
+
+      <div class="type-card rl">
+        <div class="icon">🏆</div>
+        <h3>강화 학습</h3>
+        <div class="def">보상은 최대화, 벌은 최소화하는 방향으로 행동을 강화하는 학습 방법</div>
+        <ul>
+          <li>컴퓨터가 시행착오를 겪으며 스스로 알고리즘을 개선</li>
+          <li>행동(action)에 따른 보상이 있어야 학습 가능</li>
+          <li>예: 알파고가 바둑을 통해 강화 학습으로 실력 향상</li>
+        </ul>
+        <span class="label">대표 알고리즘</span>
+        <div class="chip-row"><span class="chip">Q-러닝</span><span class="chip">정책 경사법</span></div>
+        <span class="label">활용 예시</span>
+        <div class="chip-row"><span class="chip">알파고(바둑)</span><span class="chip">게임 AI</span><span class="chip">로봇 제어</span><span class="chip">자율주행</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 한눈에 비교 -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">2</span> 한눈에 비교하기</h2>
+    <p class="sec-sub">세 유형의 차이를 표로 정리했습니다.</p>
+    <table class="cmp">
+      <colgroup>
+        <col style="width:16%"><col style="width:28%"><col style="width:28%"><col style="width:28%">
+      </colgroup>
+      <thead><tr><th>구분</th><th>지도학습</th><th>비지도학습</th><th>강화 학습</th></tr></thead>
+      <tbody>
+        <tr><td>레이블(정답)</td><td class="sup-col">있음</td><td class="uns-col">없음</td><td class="rl-col">없음 (대신 보상·벌)</td></tr>
+        <tr><td>학습 목표</td><td class="sup-col">정답을 정확하게 예측하는 것</td><td class="uns-col">데이터의 패턴·구조 발견</td><td class="rl-col">보상을 최대화하는 행동 학습</td></tr>
+        <tr><td>문제 유형</td><td class="sup-col">분류, 예측(회귀)</td><td class="uns-col">군집</td><td class="rl-col">시행착오를 통한 행동 결정</td></tr>
+        <tr><td>성능 평가</td><td class="sup-col">비교적 쉬움 (정답과 비교)</td><td class="uns-col">어려움 (정답이 없음)</td><td class="rl-col">보상 설계에 따라 달라짐</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 3. 알고리즘 예시: k-NN -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">3</span> 알고리즘 예시로 개념 확인하기 — k-최근접 이웃(k-NN)</h2>
+    <p class="sec-sub">지도학습(분류) 알고리즘인 k-NN이 실제로 어떻게 분류하는지 살펴봅시다. (교과서 75쪽)</p>
+    <div class="knn-box">
+      <div class="txt">
+        <p><b>k-최근접 이웃(k-NN)</b>은 분류하려는 새 데이터를 기존 데이터 중 <b>가장 가까운 k개의 이웃</b>을 찾아, 그 이웃들의 다수결로 분류하는 지도학습(분류) 알고리즘입니다.</p>
+        <p>오른쪽 그림처럼 <b>k = 5</b>일 때, 새로운 데이터(★)에서 가장 가까운 5개의 이웃 중 <b>4개가 버시컬러, 1개가 버지니카</b>라면 새 데이터는 다수결에 따라 <b>버시컬러</b>로 분류됩니다.</p>
+      </div>
+      <svg viewBox="0 0 300 220" width="300" height="220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="10" x2="30" y2="190" stroke="#ccc"/>
+        <line x1="30" y1="190" x2="290" y2="190" stroke="#ccc"/>
+        <circle cx="160" cy="100" r="46" fill="#2F8F7F" opacity="0.08"/>
+        <circle cx="150" cy="70" r="6" fill="#E8734A"/>
+        <circle cx="175" cy="85" r="6" fill="#E8734A"/>
+        <circle cx="140" cy="110" r="6" fill="#E8734A"/>
+        <circle cx="185" cy="120" r="6" fill="#E8734A"/>
+        <polygon points="120,130 128,145 112,145" fill="#6B5CA5"/>
+        <circle cx="80" cy="40" r="6" fill="#6B5CA5" opacity="0.35"/>
+        <circle cx="230" cy="150" r="6" fill="#E8734A" opacity="0.35"/>
+        <circle cx="250" cy="60" r="6" fill="#6B5CA5" opacity="0.35"/>
+        <circle cx="60" cy="160" r="6" fill="#E8734A" opacity="0.35"/>
+        <path d="M160 100 L150 70 M160 100 L175 85 M160 100 L140 110 M160 100 L185 120 M160 100 L120 138" stroke="#333" stroke-width="1" stroke-dasharray="2,2"/>
+        <path d="M160 92 L160 108 M152 100 L168 100" stroke="#111" stroke-width="2.5"/>
+        <circle cx="160" cy="100" r="9" fill="none" stroke="#111" stroke-width="2"/>
+        <text x="168" y="95" font-size="10" fill="#111" font-weight="bold">새 데이터</text>
+      </svg>
+    </div>
+    <div class="legend2">
+      <span><span class="dot" style="background:#E8734A"></span>버시컬러</span>
+      <span><span class="tri"></span>버지니카</span>
+      <span>⊕ 새 데이터 (k=5 이웃만 진하게 표시)</span>
+    </div>
+
+    <h3 style="margin-top:22px;color:var(--teal-dark);font-size:16px;">✏ 활동 — 실제 데이터로 k-NN 분류해보기</h3>
+    <p class="sec-sub" style="margin-left:0;">붓꽃 데이터를 이용해 새로운 데이터를 입력하거나 그래프를 클릭해 위치를 지정하면, k-최근접 이웃 알고리즘이 실시간으로 분류 결과를 보여줍니다.</p>
+    <div class="stat-row">
+      <div class="stat-box"><div class="n" id="dataCountBox">36</div><div class="l">이웃 후보 데이터 수</div></div>
+    </div>
+    <div class="flex2">
+      <div>
+        <label class="field-label">이웃의 수 k = <span class="k-display" id="kValue">5</span></label>
+        <input type="range" min="1" max="15" step="2" id="kSlider" value="5">
+        <div class="flex2" style="margin-top:14px;">
+          <div>
+            <label class="field-label">새 데이터의 꽃잎 길이 (cm)</label>
+            <input type="number" id="plInput" step="0.1" min="0.5" max="7" value="4.5">
+          </div>
+          <div>
+            <label class="field-label">새 데이터의 꽃잎 너비 (cm)</label>
+            <input type="number" id="pwInput" step="0.1" min="0" max="2.6" value="1.4">
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--sub);margin-top:8px;">📍 오른쪽 그래프를 클릭해서 새 데이터 위치를 바로 지정할 수도 있어요.</p>
+        <div class="predict-box" id="predictBox"></div>
+      </div>
+      <div id="plotWrap"></div>
+    </div>
+  </section>
+
+  <!-- 4. 형성평가 -->
+  <section class="card">
+    <h2 class="sec-title"><span class="sec-num">4</span> 형성평가 — 어떤 학습 유형일까?</h2>
+    <p class="sec-sub">다음 상황을 읽고 지도학습·비지도학습·강화학습 중 알맞은 유형을 골라 자신의 이해 정도를 점검해 보세요.</p>
+    <div class="quiz-progress">
+      <span class="score-badge" id="scoreBadge">0 / 10 맞음</span>
+      <button class="btn secondary" id="resetBtn">↺ 다시 풀기</button>
+    </div>
+    <div id="quizArea"></div>
+  </section>
+
+</div>
+
+<script>
+/* ============================== k-NN 활동 데이터 ============================== */
+const setosaRaw = [
+  [5.1,3.5,1.4,0.2],[4.9,3.0,1.4,0.2],[4.7,3.2,1.3,0.2],[4.6,3.1,1.5,0.2],
+  [5.0,3.6,1.4,0.2],[5.4,3.9,1.7,0.4],[4.6,3.4,1.4,0.3],[5.0,3.4,1.5,0.2],
+  [4.4,2.9,1.4,0.2],[4.9,3.1,1.5,0.1],[5.4,3.7,1.5,0.2],[4.8,3.4,1.6,0.2],
+];
+const versicolorRaw = [
+  [7.0,3.2,4.7,1.4],[6.4,3.2,4.5,1.5],[6.9,3.1,4.9,1.5],[5.5,2.3,4.0,1.3],
+  [6.5,2.8,4.6,1.5],[5.7,2.8,4.5,1.3],[6.3,3.3,4.7,1.6],[4.9,2.4,3.3,1.0],
+  [6.6,2.9,4.6,1.3],[5.2,2.7,3.9,1.4],[5.9,3.2,4.8,1.8],[6.1,2.8,4.0,1.3],
+];
+const virginicaRaw = [
+  [6.3,3.3,6.0,2.5],[5.8,2.7,5.1,1.9],[7.1,3.0,5.9,2.1],[6.3,2.9,5.6,1.8],
+  [6.5,3.0,5.8,2.2],[7.6,3.0,6.6,2.1],[4.9,2.5,4.5,1.7],[7.3,2.9,6.3,1.8],
+  [6.7,2.5,5.8,1.8],[7.2,3.6,6.1,2.5],[6.5,3.2,5.1,2.0],[6.4,2.7,5.3,1.9],
+];
+const SPECIES3 = ["세토사", "버시컬러", "버지니카"];
+const SPCOLOR3 = {"세토사":"#2F8F7F","버시컬러":"#E8734A","버지니카":"#6B5CA5"};
+const IRIS_DATA = [];
+let irisId = 0;
+for (let i = 0; i < 12; i++) {
+  [["세토사", setosaRaw[i]], ["버시컬러", versicolorRaw[i]], ["버지니카", virginicaRaw[i]]].forEach(([sp, v]) => {
+    IRIS_DATA.push({ id: irisId++, species: sp, sl: v[0], sw: v[1], pl: v[2], pw: v[3] });
+  });
+}
+
+let knnState = { k: 5, pl: 4.5, pw: 1.4 };
+
+function knnPredict(query, trainSet, k){
+  const withDist = trainSet.map(r=>({...r, dist:Math.sqrt((r.pl-query.pl)**2+(r.pw-query.pw)**2)}))
+    .sort((a,b)=>a.dist-b.dist);
+  const neighbors = withDist.slice(0, Math.min(k, withDist.length));
+  const votes={};
+  neighbors.forEach(n=>votes[n.species]=(votes[n.species]||0)+1);
+  let predicted=null, max=-1;
+  Object.keys(votes).forEach(sp=>{ if(votes[sp]>max){max=votes[sp];predicted=sp;} });
+  return {predicted, neighbors, votes};
+}
+
+function scatterSVG(trainSet, query, neighbors){
+  const W=560,H=360, ML=46,MR=16,MT=16,MB=40;
+  const xMin=0.5,xMax=7.2, yMin=0,yMax=2.7;
+  const x = v => ML + (v-xMin)/(xMax-xMin)*(W-ML-MR);
+  const y = v => H-MB - (v-yMin)/(yMax-yMin)*(H-MT-MB);
+  let s = `<svg class="plot" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<line x1="${ML}" y1="${H-MB}" x2="${W-MR}" y2="${H-MB}" stroke="#999"/>`;
+  s += `<line x1="${ML}" y1="${MT}" x2="${ML}" y2="${H-MB}" stroke="#999"/>`;
+  for(let gx=1; gx<=7; gx++){ s += `<line x1="${x(gx)}" y1="${MT}" x2="${x(gx)}" y2="${H-MB}" stroke="#eee"/><text x="${x(gx)}" y="${H-MB+16}" font-size="10" text-anchor="middle" fill="#888">${gx}</text>`; }
+  for(let gy=0; gy<=2.5; gy+=0.5){ s += `<line x1="${ML}" y1="${y(gy)}" x2="${W-MR}" y2="${y(gy)}" stroke="#eee"/><text x="${ML-8}" y="${y(gy)+3}" font-size="10" text-anchor="end" fill="#888">${gy}</text>`; }
+  s += `<text x="${(ML+W-MR)/2}" y="${H-6}" font-size="11" text-anchor="middle" fill="#555">꽃잎 길이 (cm)</text>`;
+  s += `<text x="12" y="${(MT+H-MB)/2}" font-size="11" text-anchor="middle" fill="#555" transform="rotate(-90,12,${(MT+H-MB)/2})">꽃잎 너비 (cm)</text>`;
+  if(neighbors){
+    neighbors.forEach(n=>{ s += `<line x1="${x(query.pl)}" y1="${y(query.pw)}" x2="${x(n.pl)}" y2="${y(n.pw)}" stroke="#6B5CA5" stroke-width="1" stroke-dasharray="3,3"/>`; });
+  }
+  trainSet.forEach(r=>{
+    const isN = neighbors && neighbors.some(n=>n.id===r.id);
+    s += `<circle cx="${x(r.pl)}" cy="${y(r.pw)}" r="${isN?6:4.5}" fill="${SPCOLOR3[r.species]}" opacity="${isN?1:0.55}" stroke="${isN?'#333':'none'}" stroke-width="${isN?1.5:0}"/>`;
+  });
+  if(query){
+    s += `<circle cx="${x(query.pl)}" cy="${y(query.pw)}" r="7" fill="#111" stroke="#fff" stroke-width="2"/>`;
+    s += `<text x="${x(query.pl)+10}" y="${y(query.pw)-8}" font-size="11" fill="#111" font-weight="bold">새 데이터</text>`;
+  }
+  s += `</svg>`;
+  return s;
+}
+
+function renderKnnActivity(){
+  const q = { pl: knnState.pl, pw: knnState.pw };
+  const { predicted, neighbors, votes } = knnPredict(q, IRIS_DATA, knnState.k);
+  const voteStr = Object.keys(votes).map(sp => `${sp} ${votes[sp]}개`).join(', ');
+  document.getElementById('plotWrap').innerHTML =
+    scatterSVG(IRIS_DATA, q, neighbors) +
+    `<div class="legend2">${SPECIES3.map(sp=>`<span><span class="dot" style="background:${SPCOLOR3[sp]}"></span>${sp}</span>`).join('')}<span><span class="dot" style="background:#111"></span>새 데이터</span></div>`;
+  document.getElementById('predictBox').innerHTML =
+    `🔮 예측 결과: <b>${predicted}</b><br><span style="font-size:12.5px;">가까운 이웃 ${knnState.k}개 중 ${voteStr}</span>`;
+  document.getElementById('kValue').textContent = knnState.k;
+  document.getElementById('dataCountBox').textContent = IRIS_DATA.length;
+
+  const svg = document.querySelector('#plotWrap svg.plot');
+  svg.addEventListener('click', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const vb = svg.viewBox.baseVal;
+    const px = (e.clientX-rect.left)/rect.width*vb.width;
+    const py = (e.clientY-rect.top)/rect.height*vb.height;
+    const ML=46,MR=16,MT=16,MB=40,W=560,H=360;
+    const xMin=0.5,xMax=7.2,yMin=0,yMax=2.7;
+    const pl = xMin + (px-ML)/(W-ML-MR)*(xMax-xMin);
+    const pw = yMax - (py-MT)/(H-MT-MB)*(yMax-yMin);
+    if(pl<xMin||pl>xMax||pw<yMin||pw>yMax) return;
+    knnState.pl = Math.round(pl*10)/10;
+    knnState.pw = Math.round(Math.max(0,pw)*10)/10;
+    document.getElementById('plInput').value = knnState.pl;
+    document.getElementById('pwInput').value = knnState.pw;
+    renderKnnActivity();
+  });
+}
+
+document.getElementById('kSlider').addEventListener('input', (e) => {
+  knnState.k = parseInt(e.target.value);
+  renderKnnActivity();
+});
+document.getElementById('plInput').addEventListener('change', (e) => {
+  knnState.pl = parseFloat(e.target.value) || 0;
+  renderKnnActivity();
+});
+document.getElementById('pwInput').addEventListener('change', (e) => {
+  knnState.pw = parseFloat(e.target.value) || 0;
+  renderKnnActivity();
+});
+renderKnnActivity();
+
+/* ============================== 유형 구분 퀴즈 ============================== */
+const QUIZ = [
+  { text: "알파고가 바둑 대국에서 이기면 보상을, 지면 벌점을 받으며 대국 실력을 향상시켰다.", answer: "강화학습",
+    explain: "행동(수를 두는 것)에 따른 보상·벌을 통해 시행착오로 실력을 향상시키므로 강화 학습의 대표 사례입니다." },
+  { text: "이메일에 스팸/정상이라는 정답이 표시된 데이터를 학습해서, 새로 온 메일이 스팸인지 아닌지 구분한다.", answer: "지도학습",
+    explain: "정답(레이블: 스팸/정상)이 있는 데이터로 학습해 두 클래스로 구분하므로 지도학습(분류)입니다." },
+  { text: "쇼핑몰 고객의 구매 데이터에 정답(그룹) 표시 없이, 비슷한 소비 패턴을 가진 고객끼리 자동으로 묶는다.", answer: "비지도학습",
+    explain: "레이블 없이 데이터 자체에서 비슷한 특징끼리 묶는 군집 문제이므로 비지도학습입니다." },
+  { text: "학생들의 주간 학습 시간과 시험 점수 데이터를 학습해서, 새로운 학생의 학습 시간으로 예상 점수를 구한다.", answer: "지도학습",
+    explain: "정답(점수)이 있는 데이터로 학습해 연속적인 값을 예측하므로 지도학습(예측/회귀)입니다." },
+  { text: "휴머노이드 로봇이 덤블링에 성공하면 보상을, 착지에 실패하면 벌점을 받으며 반복훈련하여 동작을 스스로 개선한다.", answer: "강화학습",
+    explain: "로봇이 시행착오를 겪으며 보상·벌에 따라 동작(행동)을 개선해 나가므로 강화 학습입니다." },
+  { text: "뉴스 기사에 주제 레이블이 전혀 없는 상태에서, 비슷한 내용의 기사끼리 자동으로 그룹을 짓는다.", answer: "비지도학습",
+    explain: "정답(주제 라벨) 없이 데이터 자체의 패턴으로 그룹을 지으므로 비지도학습(군집)입니다." },
+  { text: "손글씨 숫자 이미지에 0~9 정답이 표시되어 있는 데이터로 학습해서, 새로 쓴 숫자가 몇인지 알아낸다.", answer: "지도학습",
+    explain: "0~9라는 정답(레이블)이 있는 데이터로 학습해 클래스를 구분하므로 지도학습(분류)입니다." },
+  { text: "신용카드 거래 데이터에 정답(이상거래 여부) 없이, 평소와 다른 패턴을 보이는 거래를 자동으로 찾아낸다.", answer: "비지도학습",
+    explain: "정답 없이 데이터의 패턴에서 벗어난 것을 찾아내므로 비지도학습입니다." },
+  { text: "자율주행차가 주행 중 안전하게 운전하면 보상을, 사고 위험 행동을 하면 벌점을 받으며 운전법을 학습한다.", answer: "강화학습",
+    explain: "행동에 따른 보상·벌로 스스로 운전법을 개선해 나가므로 강화 학습입니다." },
+  { text: "붓꽃의 꽃잎·꽃받침 속성과 종류(정답)가 모두 있는 데이터를 학습해서, 새로운 꽃의 종류를 분류한다.", answer: "지도학습",
+    explain: "정답(종류)이 있는 데이터로 학습해 클래스를 구분하므로 지도학습(분류)입니다." },
+];
+
+const TYPES = ["지도학습", "비지도학습", "강화학습"];
+let answers = {};
+
+function renderQuiz(){
+  const area = document.getElementById('quizArea');
+  area.innerHTML = QUIZ.map((q, i) => `
+    <div class="q-card" id="qcard-${i}">
+      <span class="q-num">문제 ${i+1}</span>
+      <div class="q-text">${q.text}</div>
+      <div class="opt-row">
+        ${TYPES.map(t => `<button class="opt-btn ${answers[i]===t?'selected':''}" data-i="${i}" data-t="${t}">${t}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-${i}"></div>
+    </div>
+  `).join('');
+  area.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i), t = btn.dataset.t;
+      answers[i] = t;
+      document.querySelectorAll(`.opt-btn[data-i="${i}"]`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      showFeedback(i);
+      updateScore();
+    });
+  });
+}
+
+function showFeedback(i){
+  const q = QUIZ[i];
+  const fb = document.getElementById(`fb-${i}`);
+  const correct = answers[i] === q.answer;
+  fb.className = 'feedback ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = correct
+    ? `✅ 정답입니다! ${q.explain}`
+    : `❌ 다시 생각해보세요. (정답: ${q.answer}) ${q.explain}`;
+}
+
+function updateScore(){
+  const score = QUIZ.filter((q, i) => answers[i] === q.answer).length;
+  document.getElementById('scoreBadge').textContent = `${score} / ${QUIZ.length} 맞음`;
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  answers = {};
+  updateScore();
+  renderQuiz();
+});
+
+renderQuiz();
+updateScore();
+</script>
+</body>
+</html>
